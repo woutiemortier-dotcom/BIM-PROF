@@ -4,465 +4,490 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BIM Professionals Belgium</title>
-<meta name="description" content="Het exclusieve netwerk- en kennisevent voor BIM-specialisten in België.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500&family=Caveat:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="plugins/splitting.css">
+<meta name="description" content="Het exclusieve netwerk- en kennisevent voor BIM-specialisten in België. Keynotes, cross-company kennisdeling en netwerken.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
 <style>
+/* ─── RESET ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--o:#FF5500;--b:#0A0A0A;--w:#fff;--dim:rgba(255,255,255,.4)}
-html{overflow-x:hidden}
+:root{
+  --o:#FF5500;--o2:#E63D00;
+  --b:#080808;--w:#FAFAF8;
+  --dim:rgba(250,250,248,.38);--dim2:rgba(250,250,248,.1);
+}
+html{overflow-x:hidden;scroll-behavior:auto}
 body{background:var(--b);color:var(--w);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;cursor:none}
 
-/* CURSOR */
-#cur{position:fixed;width:10px;height:10px;background:var(--o);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
-#curf{position:fixed;width:40px;height:40px;border:1px solid rgba(255,85,0,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
-.hover-active #curf{width:64px;height:64px;border-color:var(--o)}
+/* ─── GRAIN ─── */
+#grain{position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.4;mix-blend-mode:screen}
 
-/* CANVAS */
-#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.85}
+/* ─── CURSOR ─── */
+#cur{position:fixed;width:8px;height:8px;background:var(--o);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#curf{position:fixed;width:36px;height:36px;border:1.5px solid rgba(255,85,0,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s cubic-bezier(.23,1,.32,1),height .3s cubic-bezier(.23,1,.32,1),border-color .3s}
+body.h-on #curf{width:58px;height:58px;border-color:var(--o)}
+body.h-on #cur{transform:translate(-50%,-50%) scale(0);transition:transform .2s}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:22px 52px;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:-.2px}
-.nav-pill{font-size:9px;letter-spacing:3px;border:1px solid var(--o);color:var(--o);padding:5px 16px;border-radius:20px}
+/* ─── LOADER ─── */
+#loader{position:fixed;inset:0;z-index:7000;background:var(--b);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#l-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(110px,22vw,260px);line-height:1;letter-spacing:-8px;color:var(--w);transition:color .4s}
+#l-label{font-size:9px;letter-spacing:6px;color:rgba(250,250,248,.2);margin-top:12px}
+#l-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--o);width:0;transition:width .05s linear}
 
-/* HERO */
-.s-hero{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 5vw 0;overflow:hidden}
-.hero-logo{margin-bottom:52px}
-.hero-kicker{font-size:10px;letter-spacing:6px;color:var(--o);margin-bottom:22px}
-.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(44px,9vw,104px);line-height:1.0;letter-spacing:-3px}
-.hero-title .word{display:inline-block;overflow:hidden;margin:0 4px}
-.hero-title .char{display:inline-block;transform:translateY(110%)}
-.hero-title .accent{color:var(--o)}
-.hero-sub{font-size:clamp(14px,1.6vw,18px);color:var(--dim);max-width:540px;line-height:1.9;margin:36px auto 0;opacity:0;transform:translateY(24px)}
-.scroll-cta{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0}
-.scroll-cta p{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,.25)}
-.scroll-line{width:1px;height:52px;background:linear-gradient(to bottom,transparent,var(--o));animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:0;transform:scaleY(.3);transform-origin:top}60%{opacity:1;transform:scaleY(1)}}
+/* ─── SIDE LABELS ─── */
+.side-l,.side-r{position:fixed;font-size:9px;letter-spacing:4px;color:rgba(250,250,248,.12);z-index:100;writing-mode:vertical-rl;top:50%;pointer-events:none}
+.side-l{left:18px;transform:translateY(-50%) rotate(180deg)}
+.side-r{right:18px;transform:translateY(-50%)}
 
-/* MARQUEE */
-.marquee-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:18px 0;background:rgba(255,85,0,.03)}
-.marquee-inner{display:flex;white-space:nowrap;animation:scroll 22s linear infinite}
-.marquee-inner:hover{animation-play-state:paused}
-.m-item{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(16px,2.5vw,24px);letter-spacing:2px;padding:0 44px;color:rgba(255,255,255,.12)}
-.m-item .dot{color:var(--o)}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ─── SEC COUNTER ─── */
+#sec-ctr{position:fixed;left:48px;bottom:32px;z-index:100;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:2px;color:rgba(250,250,248,.18);display:flex;align-items:center;gap:10px}
+#sec-ctr::before{content:'';display:block;width:22px;height:1px;background:rgba(250,250,248,.14)}
+#sec-n{color:var(--o)}
 
-/* HORIZONTAL PANELS */
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:24px 56px;display:flex;align-items:center;justify-content:space-between}
+.n-brand{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.3px;opacity:.8}
+.n-right{display:flex;align-items:center;gap:28px}
+.n-link{font-size:9px;letter-spacing:4px;color:rgba(250,250,248,.3);text-decoration:none;transition:color .2s}
+.n-link:hover{color:var(--o)}
+.n-badge{font-size:9px;letter-spacing:3px;border:1px solid rgba(255,85,0,.35);color:var(--o);padding:5px 14px;border-radius:20px}
+
+/* ─── BG CANVAS ─── */
+#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* ─── HERO ─── */
+.s-hero{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 6vw 8vh;overflow:hidden}
+.h-kicker{font-size:10px;letter-spacing:6px;color:var(--o);margin-bottom:22px;opacity:0;transform:translateY(14px)}
+.h-title-wrap{position:relative}
+.h-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(68px,12vw,170px);line-height:.93;letter-spacing:-5px}
+.h-line{display:block;overflow:hidden}
+.h-line span{display:block;transform:translateY(110%)}
+.h-ghost{position:absolute;top:0;left:0;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(68px,12vw,170px);line-height:.93;letter-spacing:-5px;-webkit-text-stroke:1.5px rgba(255,85,0,.18);color:transparent;transform:translate(5px,5px);pointer-events:none;z-index:-1;aria-hidden:true}
+.h-meta{display:flex;align-items:flex-end;justify-content:space-between;margin-top:36px;padding-top:22px;border-top:1px solid var(--dim2);opacity:0;transform:translateY(18px)}
+.h-sub{font-size:clamp(13px,1.3vw,16px);color:var(--dim);max-width:380px;line-height:1.9}
+.h-scroll{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.18)}
+.s-dot{width:6px;height:6px;border-radius:50%;background:var(--o);animation:bl 1.8s ease infinite}
+@keyframes bl{0%,100%{opacity:.25}50%{opacity:1}}
+
+/* ─── MARQUEE ─── */
+.mq-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid var(--dim2);border-bottom:1px solid var(--dim2);padding:15px 0}
+.mq-track{display:flex;white-space:nowrap;animation:mq 30s linear infinite}
+.mq-track:hover{animation-play-state:paused}
+.mq-it{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(12px,1.6vw,18px);letter-spacing:3px;padding:0 36px;color:rgba(250,250,248,.07);display:flex;align-items:center;gap:36px}
+.mq-it .d{color:var(--o)}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── HORIZ ─── */
 .s-horiz{position:relative;z-index:1}
-.horiz-track{display:flex}
-.h-panel{width:100vw;min-height:100vh;flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;padding:80px 10vw 80px;border-right:1px solid rgba(255,255,255,.05);overflow:hidden;position:relative}
-.panel-bg-num{position:absolute;right:8vw;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(140px,22vw,280px);color:rgba(255,85,0,.04);line-height:1;pointer-events:none;user-select:none}
-.panel-tag{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:20px}
-.panel-title{font-family:'Syne',sans-serif;font-size:clamp(40px,6.5vw,80px);font-weight:800;line-height:1.08;margin-bottom:28px}
-.panel-desc{font-size:clamp(14px,1.5vw,17px);color:var(--dim);max-width:500px;line-height:1.85}
-.panel-dots{display:flex;gap:8px;margin-top:52px}
-.dot-el{height:2px;border-radius:2px;background:rgba(255,255,255,.15);transition:width .4s,background .4s}
-.dot-el.on{background:var(--o)}
+.h-track{display:flex}
+.h-panel{width:100vw;min-height:100vh;flex-shrink:0;display:grid;grid-template-rows:1fr auto;padding:110px 8vw 68px;border-right:1px solid var(--dim2);position:relative;overflow:hidden}
+.p-content{align-self:end}
+.p-bnum{position:absolute;right:5vw;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(160px,26vw,320px);color:rgba(255,85,0,.03);line-height:1;pointer-events:none;letter-spacing:-12px}
+.p-tag{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:16px}
+.p-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(46px,6.5vw,90px);line-height:1.0;margin-bottom:22px;letter-spacing:-2px}
+.p-title em{font-style:normal;-webkit-text-stroke:1px rgba(250,250,248,.25);color:transparent}
+.p-desc{font-size:clamp(14px,1.3vw,16px);color:var(--dim);max-width:460px;line-height:1.9}
+.p-prog{display:flex;gap:6px;margin-top:44px;align-items:center}
+.p-pl{height:1px;background:var(--dim2);transition:width .5s cubic-bezier(.23,1,.32,1),background .5s}
+.p-pl.on{background:var(--o)}
 
-/* STATEMENT */
-.s-statement{position:relative;z-index:1;min-height:220vh}
-.stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;padding:0 8vw;overflow:hidden}
-.stmt-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,6.5vw,84px);line-height:1.2;text-align:center;max-width:900px}
-/* Splitting chars */
-.stmt-text .word{overflow:hidden;display:inline-block;margin:0 8px}
-.stmt-text .char{display:inline-block;opacity:.1;transform:translateY(60%) rotateX(-40deg);transform-origin:bottom}
-.stmt-text .char.accent{color:var(--o)}
+/* ─── STATEMENT ─── */
+.s-stmt{position:relative;z-index:1;min-height:230vh}
+.stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 8vw;overflow:hidden}
+.stmt-inner{max-width:1050px}
+.stmt-lbl{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.16);margin-bottom:28px}
+.stmt-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(38px,6.5vw,92px);line-height:1.12}
+.s-word{display:inline-block;overflow:hidden;margin:0 5px}
+.s-char{display:inline-block;opacity:.05;transform:translateY(55%) rotateX(-50deg);transform-origin:bottom center;will-change:opacity,transform}
+.s-word.acc .s-char{color:var(--o)}
 
-/* WHO */
-.s-who{position:relative;z-index:1;padding:130px 10vw}
-.who-label{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:20px}
-.who-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,5vw,64px);line-height:1.1;max-width:660px;margin-bottom:72px}
-.who-grid{display:flex;flex-wrap:wrap;gap:12px}
-.who-chip{border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:14px 30px;font-size:clamp(13px,1.3vw,16px);color:rgba(255,255,255,.5);opacity:0;transform:translateY(28px) scale(.94)}
+/* ─── WHO ─── */
+.s-who{position:relative;z-index:1;padding:130px 8vw;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.w-badge{display:inline-block;font-size:9px;letter-spacing:5px;border:1px solid var(--dim2);padding:6px 15px;border-radius:20px;color:rgba(250,250,248,.28);margin-bottom:24px}
+.w-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,64px);line-height:1.06;letter-spacing:-1.5px}
+.w-title span{color:var(--o)}
+.w-desc{font-size:15px;color:var(--dim);line-height:1.9;margin-bottom:44px}
+.who-grid{display:flex;flex-wrap:wrap;gap:9px}
+.chip{border:1px solid var(--dim2);border-radius:100px;padding:10px 22px;font-size:13px;color:rgba(250,250,248,.38);opacity:0;transform:translateY(22px) scale(.95);transition:border-color .3s,color .3s}
+.chip:hover{border-color:var(--o);color:var(--w)}
 
-/* CTA */
-.s-cta{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 5vw;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
-.cta-label{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:24px}
-.cta-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(40px,7vw,88px);line-height:1.0;letter-spacing:-2px;margin-bottom:28px}
-.cta-title .accent{color:var(--o)}
-.cta-sub{color:var(--dim);max-width:480px;font-size:17px;line-height:1.85;margin:0 auto 52px}
-.cta-form{display:flex;max-width:480px;width:100%;margin:0 auto;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:8px}
-.cta-form input{flex:1;background:rgba(255,255,255,.04);border:none;outline:none;padding:18px 22px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:#fff}
-.cta-form input::placeholder{color:rgba(255,255,255,.2)}
-.cta-form button{background:var(--o);border:none;padding:18px 26px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;letter-spacing:1.5px;color:#fff;cursor:none;white-space:nowrap;transition:background .2s}
-.cta-form button:hover{background:#d94700}
-.cta-note{margin-top:20px;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.18)}
+/* ─── CTA ─── */
+.s-cta{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:100px 8vw;border-top:1px solid var(--dim2);overflow:hidden}
+.cta-bg{position:absolute;right:-3vw;bottom:-4vh;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(130px,24vw,340px);line-height:1;color:rgba(255,85,0,.035);letter-spacing:-14px;pointer-events:none;user-select:none;white-space:nowrap}
+.cta-lbl{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:18px}
+.cta-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,8.5vw,125px);line-height:.93;letter-spacing:-4px;max-width:860px;margin-bottom:48px}
+.cta-title em{font-style:normal;color:var(--o)}
+.cta-form{display:flex;border:1px solid rgba(250,250,248,.11);border-radius:6px;overflow:hidden;max-width:490px;width:100%;background:rgba(250,250,248,.02)}
+.cta-form input{flex:1;background:transparent;border:none;outline:none;padding:18px 20px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--w)}
+.cta-form input::placeholder{color:rgba(250,250,248,.17)}
+.cta-form button{background:var(--o);border:none;padding:18px 22px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s}
+.cta-form button:hover{background:var(--o2)}
+.cta-note{margin-top:15px;font-size:10px;letter-spacing:3px;color:rgba(250,250,248,.14)}
 
-/* FOOTER */
-footer{position:relative;z-index:1;padding:28px 52px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-footer p,footer a{font-size:11px;color:rgba(255,255,255,.2);text-decoration:none;transition:color .2s}
-footer a:hover{color:var(--o)}
+/* ─── FOOTER ─── */
+footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--dim2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.f-l{display:flex;align-items:center;gap:12px;font-size:11px;color:rgba(250,250,248,.16)}
+.f-r{display:flex;gap:22px}
+.f-r a{font-size:11px;color:rgba(250,250,248,.16);text-decoration:none;transition:color .2s;letter-spacing:.5px}
+.f-r a:hover{color:var(--o)}
 
-/* UTILS */
-.clip-reveal{clip-path:inset(0 100% 0 0)}
-
-@media(max-width:768px){
-  nav{padding:16px 20px}
-  .h-panel{padding:60px 6vw}
-  .s-who{padding:80px 6vw}
-  footer{padding:20px}
+@media(max-width:900px){
+  nav{padding:16px 20px}.n-right .n-link{display:none}
+  .s-hero{padding:0 5vw 6vh}
+  .s-who{grid-template-columns:1fr;gap:36px;padding:80px 5vw}
+  .s-cta{padding:80px 5vw}
+  .h-panel{padding:80px 5vw 52px}
+  footer{padding:18px 20px}
+  .side-l,.side-r,#sec-ctr{display:none}
 }
 </style>
 </head>
 <body>
 
+<canvas id="grain"></canvas>
 <div id="cur"></div>
 <div id="curf"></div>
 <canvas id="bg"></canvas>
 
+<!-- LOADER -->
+<div id="loader">
+  <div id="l-num">0</div>
+  <div id="l-label">LADEN · BIM PROFESSIONALS BELGIUM</div>
+  <div id="l-bar"></div>
+</div>
+
+<!-- SIDE LABELS -->
+<div class="side-l">INVITE ONLY · EDITIE 1 · BELGIË · 2026</div>
+<div class="side-r">BIMPROFESSIONALS.BE · NETWERK · KENNIS · BIM</div>
+
+<!-- SECTION COUNTER -->
+<div id="sec-ctr"><span id="sec-n">01</span> / 04</div>
+
 <!-- NAV -->
 <nav>
-  <div class="nav-brand">
-    <svg viewBox="0 0 200 185" width="30" height="28">
+  <div class="n-brand">
+    <svg viewBox="0 0 200 185" width="26" height="24" aria-hidden="true">
       <polygon points="10,18 152,18 178,54 36,54" fill="#2A2A2A"/>
-      <polygon points="152,18 178,54 178,152 152,116" fill="#1E1E1E"/>
-      <path d="M 22,20 C 60,17 120,17 144,20 Q 154,21 154,32 L 154,108 Q 154,118 142,118 L 22,118 Q 10,118 10,108 L 10,32 Q 10,19 22,20 Z" fill="#1E1E1E" stroke="#444" stroke-width="1" stroke-linejoin="round"/>
-      <path d="M 36,38 C 74,35 134,35 158,38 Q 168,39 168,50 L 168,126 Q 168,136 156,136 L 36,136 Q 24,136 24,126 L 24,50 Q 24,37 36,38 Z" fill="#2A2A2A" stroke="#666" stroke-width="1.2" stroke-linejoin="round"/>
-      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#111" stroke="#CCC" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="152,18 178,54 178,152 152,116" fill="#1A1A1A"/>
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#0A0A0A" stroke="#BBBBBB" stroke-width="2.2"/>
       <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
       <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
       <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
     </svg>
     BIM Professionals Belgium
   </div>
-  <div class="nav-pill">EDITIE 1 · 2026</div>
+  <div class="n-right">
+    <a href="#panels" class="n-link">OVER</a>
+    <a href="#cta" class="n-link">INSCHRIJVEN</a>
+    <span class="n-badge">EDITIE 1 · 2026</span>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section class="s-hero">
-  <div class="hero-logo" id="hero-logo">
-    <svg viewBox="0 0 200 185" width="110" height="102">
-      <polygon points="10,18 152,18 178,54 36,54" fill="#2A2A2A"/>
-      <line x1="56" y1="18" x2="82" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
-      <line x1="92" y1="18" x2="118" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
-      <line x1="128" y1="18" x2="154" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
-      <polygon points="152,18 178,54 178,152 152,116" fill="#1E1E1E"/>
-      <line x1="156" y1="50" x2="174" y2="76" stroke="#333" stroke-width=".6"/>
-      <line x1="156" y1="78" x2="174" y2="104" stroke="#333" stroke-width=".6"/>
-      <line x1="156" y1="106" x2="174" y2="132" stroke="#333" stroke-width=".6"/>
-      <line x1="10" y1="116" x2="36" y2="152" stroke="#444" stroke-width=".8"/>
-      <path d="M 22,20 C 60,17 120,17 144,20 Q 154,21 154,32 L 154,108 Q 154,118 142,118 L 22,118 Q 10,118 10,108 L 10,32 Q 10,19 22,20 Z" fill="#1E1E1E" stroke="#555" stroke-width="1.2" stroke-linejoin="round"/>
-      <path d="M 36,38 C 74,35 134,35 158,38 Q 168,39 168,50 L 168,126 Q 168,136 156,136 L 36,136 Q 24,136 24,126 L 24,50 Q 24,37 36,38 Z" fill="#2A2A2A" stroke="#777" stroke-width="1.6" stroke-linejoin="round"/>
-      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#0A0A0A" stroke="#DDD" stroke-width="2.2" stroke-linejoin="round"/>
-      <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
-      <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
-      <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
-    </svg>
+<section class="s-hero" id="hero">
+  <div class="h-kicker" id="h-kicker">BIM PROFESSIONALS BELGIUM</div>
+  <div class="h-title-wrap">
+    <h1 class="h-title" id="h-title">
+      <span class="h-line"><span>Waar de</span></span>
+      <span class="h-line"><span style="color:var(--o)">Belgische</span></span>
+      <span class="h-line"><span>BIM-sector</span></span>
+      <span class="h-line"><span>samenkomt.</span></span>
+    </h1>
+    <div class="h-ghost" aria-hidden="true">Waar de<br>Belgische<br>BIM-sector<br>samenkomt.</div>
   </div>
-  <div class="hero-kicker">BIM PROFESSIONALS BELGIUM</div>
-  <h1 class="hero-title" id="hero-title">
-    <span class="word">Waar</span>
-    <span class="word">de</span>
-    <span class="word">Belgische</span>
-    <span class="word accent">BIM&#x2011;sector</span>
-    <span class="word">samenkomt.</span>
-  </h1>
-  <p class="hero-sub" id="hero-sub">Het exclusieve netwerk- en kennisevent voor BIM-specialisten. Keynotes, cross-company kennisdeling en netwerken — voor de mensen die BIM écht begrijpen.</p>
-  <div class="scroll-cta" id="scroll-cta"><p>SCROLL</p><div class="scroll-line"></div></div>
+  <div class="h-meta" id="h-meta">
+    <p class="h-sub">Keynotes, cross-company kennisdeling en netwerken — voor de mensen die BIM écht begrijpen.</p>
+    <div class="h-scroll"><div class="s-dot"></div>SCROLL</div>
+  </div>
 </section>
 
 <!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-inner">
-    <span class="m-item">KEYNOTES <span class="dot">·</span></span>
-    <span class="m-item">KENNISDELING <span class="dot">·</span></span>
-    <span class="m-item">NETWERK <span class="dot">·</span></span>
-    <span class="m-item">BIM <span class="dot">·</span></span>
-    <span class="m-item">BELGIË <span class="dot">·</span></span>
-    <span class="m-item">INVITE ONLY <span class="dot">·</span></span>
-    <span class="m-item">EDITIE 1 <span class="dot">·</span></span>
-    <span class="m-item">2026 <span class="dot">·</span></span>
-    <span class="m-item">KEYNOTES <span class="dot">·</span></span>
-    <span class="m-item">KENNISDELING <span class="dot">·</span></span>
-    <span class="m-item">NETWERK <span class="dot">·</span></span>
-    <span class="m-item">BIM <span class="dot">·</span></span>
-    <span class="m-item">BELGIË <span class="dot">·</span></span>
-    <span class="m-item">INVITE ONLY <span class="dot">·</span></span>
-    <span class="m-item">EDITIE 1 <span class="dot">·</span></span>
-    <span class="m-item">2026 <span class="dot">·</span></span>
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-it">KEYNOTES <span class="d">▪</span></span>
+    <span class="mq-it">KENNISDELING <span class="d">▪</span></span>
+    <span class="mq-it">NETWERK <span class="d">▪</span></span>
+    <span class="mq-it">BIM <span class="d">▪</span></span>
+    <span class="mq-it">BELGIË <span class="d">▪</span></span>
+    <span class="mq-it">INVITE ONLY <span class="d">▪</span></span>
+    <span class="mq-it">EDITIE 1 <span class="d">▪</span></span>
+    <span class="mq-it">2026 <span class="d">▪</span></span>
+    <span class="mq-it">KEYNOTES <span class="d">▪</span></span>
+    <span class="mq-it">KENNISDELING <span class="d">▪</span></span>
+    <span class="mq-it">NETWERK <span class="d">▪</span></span>
+    <span class="mq-it">BIM <span class="d">▪</span></span>
+    <span class="mq-it">BELGIË <span class="d">▪</span></span>
+    <span class="mq-it">INVITE ONLY <span class="d">▪</span></span>
+    <span class="mq-it">EDITIE 1 <span class="d">▪</span></span>
+    <span class="mq-it">2026 <span class="d">▪</span></span>
   </div>
 </div>
 
 <!-- HORIZONTAL PANELS -->
-<section class="s-horiz" id="s-horiz">
-  <div id="horiz-track" class="horiz-track">
+<section class="s-horiz" id="panels">
+  <div id="h-track" class="h-track">
 
     <div class="h-panel">
-      <div class="panel-bg-num">01</div>
-      <div class="panel-tag">KEYNOTES</div>
-      <h2 class="panel-title">Diepgang<br>zonder ruis.</h2>
-      <p class="panel-desc">Lezingen van mensen die BIM op het hoogste niveau toepassen — in België en ver daarbuiten. Geen verkooppraatjes. Alleen inhoud die je sector vooruitbrengt.</p>
-      <div class="panel-dots"><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div></div>
+      <div class="p-content">
+        <div class="p-bnum">01</div>
+        <div class="p-tag">01 — KEYNOTES</div>
+        <h2 class="p-title">Diepgang<br><em>zonder</em> ruis.</h2>
+        <p class="p-desc">Lezingen van mensen die BIM op het hoogste niveau toepassen. Geen verkooppraatjes. Alleen inhoud die jouw sector écht vooruitbrengt.</p>
+      </div>
+      <div class="p-prog">
+        <div class="p-pl on" style="width:50px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+      </div>
     </div>
 
     <div class="h-panel">
-      <div class="panel-bg-num">02</div>
-      <div class="panel-tag">KENNISDELING</div>
-      <h2 class="panel-title">Wat normaal<br>binnen muren blijft.</h2>
-      <p class="panel-desc">Cross-company gesprekken over wat werkt, wat mislukt en wat de sector écht vooruitbrengt. Kennis die normaal achter gesloten deuren blijft — hier gedeeld.</p>
-      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div></div>
+      <div class="p-content">
+        <div class="p-bnum">02</div>
+        <div class="p-tag">02 — KENNISDELING</div>
+        <h2 class="p-title">Wat normaal<br>binnen <em>muren</em> blijft.</h2>
+        <p class="p-desc">Cross-company gesprekken over wat werkt, wat mislukt en wat de sector écht vooruitbrengt. Kennis die normaal achter gesloten deuren blijft — hier gedeeld.</p>
+      </div>
+      <div class="p-prog">
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl on" style="width:50px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+      </div>
     </div>
 
     <div class="h-panel">
-      <div class="panel-bg-num">03</div>
-      <div class="panel-tag">NETWERK</div>
-      <h2 class="panel-title">De juiste mensen<br>in één zaal.</h2>
-      <p class="panel-desc">Een zaal vol BIM-specialisten die begrijpen waar je het over hebt. Geen beginners, geen verkopers — alleen mensen op jouw niveau die klaar zijn om te connecteren.</p>
-      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div></div>
+      <div class="p-content">
+        <div class="p-bnum">03</div>
+        <div class="p-tag">03 — NETWERK</div>
+        <h2 class="p-title">De juiste mensen<br>in <em>één</em> zaal.</h2>
+        <p class="p-desc">Een zaal vol BIM-specialisten die begrijpen waar je het over hebt. Geen beginners, geen verkopers. Alleen mensen op jouw niveau.</p>
+      </div>
+      <div class="p-prog">
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl on" style="width:50px"></div>
+        <div class="p-pl" style="width:26px"></div>
+      </div>
     </div>
 
-    <div class="h-panel" style="background:rgba(255,85,0,.03);border-right:none">
-      <div class="panel-bg-num" style="color:rgba(255,85,0,.07)">→</div>
-      <div class="panel-tag">EDITIE 1 · 2026</div>
-      <h2 class="panel-title" style="color:var(--o)">Jij bent<br>uitgenodigd.</h2>
-      <p class="panel-desc">De eerste editie. Invite only. Beperkt aantal plaatsen. Schrijf je in voor updates en wees er als eerste bij.</p>
-      <form style="display:flex;margin-top:44px;overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:7px;max-width:420px" onsubmit="formSub(event)">
-        <input type="email" placeholder="jouw@email.be" required style="flex:1;background:rgba(255,255,255,.05);border:none;outline:none;padding:17px 20px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#fff">
-        <button type="submit" style="background:var(--o);border:none;padding:17px 22px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;letter-spacing:1px;color:#fff;cursor:none;white-space:nowrap">Inschrijven</button>
-      </form>
-      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div></div>
+    <div class="h-panel" style="background:rgba(255,85,0,.02);border-right:none">
+      <div class="p-content">
+        <div class="p-bnum" style="color:rgba(255,85,0,.05)">04</div>
+        <div class="p-tag">04 — EDITIE 1 · 2026</div>
+        <h2 class="p-title" style="color:var(--o)">Jij bent<br>uitgenodigd.</h2>
+        <p class="p-desc">De eerste editie. Invite only. Beperkt aantal plaatsen. Schrijf je in voor updates en wees er als eerste bij.</p>
+        <form style="display:flex;margin-top:40px;border:1px solid rgba(250,250,248,.12);border-radius:6px;overflow:hidden;max-width:450px;background:rgba(250,250,248,.02)" onsubmit="doSub(event)">
+          <input type="email" placeholder="jouw@email.be" required style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--w)">
+          <button type="submit" style="background:var(--o);border:none;padding:16px 20px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s">Inschrijven →</button>
+        </form>
+      </div>
+      <div class="p-prog">
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl" style="width:26px"></div>
+        <div class="p-pl on" style="width:50px"></div>
+      </div>
     </div>
 
   </div>
 </section>
 
 <!-- STATEMENT -->
-<section class="s-statement">
+<section class="s-stmt">
   <div class="stmt-sticky">
-    <p class="stmt-text" id="stmt-text">
-      <span class="word"><span class="char">B</span><span class="char">I</span><span class="char">M</span></span>
-      <span class="word accent"><span class="char">i</span><span class="char">s</span></span>
-      <span class="word"><span class="char">m</span><span class="char">e</span><span class="char">e</span><span class="char">r</span></span>
-      <span class="word"><span class="char">d</span><span class="char">a</span><span class="char">n</span></span>
-      <span class="word accent"><span class="char">s</span><span class="char">o</span><span class="char">f</span><span class="char">t</span><span class="char">w</span><span class="char">a</span><span class="char">r</span><span class="char">e</span><span class="char">.</span></span>
-      <span class="word"><span class="char">H</span><span class="char">e</span><span class="char">t</span></span>
-      <span class="word"><span class="char">i</span><span class="char">s</span></span>
-      <span class="word"><span class="char">h</span><span class="char">o</span><span class="char">e</span></span>
-      <span class="word accent"><span class="char">d</span><span class="char">e</span></span>
-      <span class="word accent"><span class="char">b</span><span class="char">o</span><span class="char">u</span><span class="char">w</span></span>
-      <span class="word"><span class="char">v</span><span class="char">a</span><span class="char">n</span></span>
-      <span class="word accent"><span class="char">m</span><span class="char">o</span><span class="char">r</span><span class="char">g</span><span class="char">e</span><span class="char">n</span></span>
-      <span class="word"><span class="char">g</span><span class="char">e</span><span class="char">b</span><span class="char">o</span><span class="char">u</span><span class="char">w</span><span class="char">d</span></span>
-      <span class="word"><span class="char">w</span><span class="char">o</span><span class="char">r</span><span class="char">d</span><span class="char">t</span><span class="char">.</span></span>
-    </p>
+    <div class="stmt-inner">
+      <div class="stmt-lbl">WAAROM DIT BESTAAT</div>
+      <p class="stmt-text" id="stmt-el"></p>
+    </div>
   </div>
 </section>
 
 <!-- WHO -->
 <section class="s-who">
-  <div class="who-label">VOOR WIE</div>
-  <h2 class="who-title">Dit is niet voor iedereen.<br>Dat is het punt.</h2>
-  <div class="who-grid" id="who-grid">
-    <span class="who-chip">BIM Managers</span>
-    <span class="who-chip">BIM Coördinatoren</span>
-    <span class="who-chip">BIM Modelleurs</span>
-    <span class="who-chip">VDC Specialisten</span>
-    <span class="who-chip">Projectleiders</span>
-    <span class="who-chip">Architecten</span>
-    <span class="who-chip">Digital Twin experts</span>
-    <span class="who-chip">Constructie-engineers</span>
-    <span class="who-chip">GIS & BIM</span>
-    <span class="who-chip">BIM Consultants</span>
-    <span class="who-chip">Infra & openbare werken</span>
-    <span class="who-chip">Facility managers</span>
+  <div>
+    <div class="w-badge">VOOR WIE</div>
+    <h2 class="w-title">Dit is niet<br>voor <span>iedereen</span>.<br>Dat is het punt.</h2>
+  </div>
+  <div>
+    <p class="w-desc">Je weet wat IFC betekent. Je hebt LOD-discussies overleefd. Je hebt ooit een BIM-protocol uitgelegd aan iemand die dacht dat het gewoon "3D tekenen" was. Dit event is voor jou.</p>
+    <div class="who-grid" id="who-grid">
+      <span class="chip">BIM Managers</span>
+      <span class="chip">BIM Coördinatoren</span>
+      <span class="chip">BIM Modelleurs</span>
+      <span class="chip">VDC Specialisten</span>
+      <span class="chip">Projectleiders</span>
+      <span class="chip">Architecten</span>
+      <span class="chip">Digital Twin experts</span>
+      <span class="chip">Constructie-engineers</span>
+      <span class="chip">GIS & BIM</span>
+      <span class="chip">BIM Consultants</span>
+      <span class="chip">Infra & openbare werken</span>
+      <span class="chip">Facility managers</span>
+    </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="s-cta">
-  <div class="cta-label">EERSTE EDITIE · BELGIË · 2026</div>
-  <h2 class="cta-title">Wees erbij van<br>het <span class="accent">begin.</span></h2>
-  <p class="cta-sub">Schrijf je in voor updates. Leden krijgen als eersten toegang — het aantal plaatsen is beperkt en het wordt invite only.</p>
-  <form class="cta-form" onsubmit="formSub(event)">
+<section class="s-cta" id="cta">
+  <div class="cta-bg">BIM</div>
+  <div class="cta-lbl">EERSTE EDITIE · BELGIË · 2026</div>
+  <h2 class="cta-title" id="cta-title">Wees erbij<br>van het <em>begin.</em></h2>
+  <form class="cta-form" onsubmit="doSub(event)">
     <input type="email" placeholder="jouw@email.be" required>
     <button type="submit">Houd mij op de hoogte</button>
   </form>
-  <p class="cta-note">Geen spam. Alleen updates over editie 1.</p>
+  <p class="cta-note">Geen spam · Alleen updates over editie 1</p>
 </section>
 
 <footer>
-  <div style="display:flex;align-items:center;gap:10px">
-    <svg viewBox="0 0 200 185" width="20" height="19">
-      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#1A1A1A" stroke="#444" stroke-width="2"/>
+  <div class="f-l">
+    <svg viewBox="0 0 200 185" width="18" height="17" aria-hidden="true">
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#111" stroke="#333" stroke-width="2"/>
       <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
       <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
       <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
     </svg>
-    <p>© 2026 BIM Professionals Belgium</p>
+    © 2026 BIM Professionals Belgium
   </div>
-  <div style="display:flex;gap:24px">
+  <div class="f-r">
     <a href="mailto:info@bimprofessionals.be">info@bimprofessionals.be</a>
-    <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+    <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
   </div>
 </footer>
 
-<script src="plugins/splitting.min.js"></script>
 <script src="plugins/three.min.js"></script>
 <script src="plugins/gsap.min.js"></script>
 <script src="plugins/ScrollTrigger.min.js"></script>
 <script src="plugins/lenis.min.js"></script>
 <script>
-gsap.registerPlugin(ScrollTrigger);
 
-/* ─── LENIS SMOOTH SCROLL ─── */
-const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add(time => lenis.raf(time * 1000));
-gsap.ticker.lagSmoothing(0);
-
-/* ─── CURSOR ─── */
-const cur = document.getElementById('cur');
-const curf = document.getElementById('curf');
-let mx = 0, my = 0, fx = 0, fy = 0;
-window.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
-});
-(function loop() {
-  requestAnimationFrame(loop);
-  fx += (mx - fx) * 0.1; fy += (my - fy) * 0.1;
-  curf.style.left = fx + 'px'; curf.style.top = fy + 'px';
-})();
-document.querySelectorAll('a,button,input').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
-});
-
-/* ─── THREE.JS PARTICLE NETWORK ─── */
-(function () {
-  const canvas = document.getElementById('bg');
-  const W = window.innerWidth, H = window.innerHeight;
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setSize(W, H);
-
-  const scene = new THREE.Scene();
-  const cam = new THREE.PerspectiveCamera(65, W / H, 0.1, 100);
-  cam.position.z = 14;
-
-  const N = 260;
-  const pos = new Float32Array(N * 3);
-  const vel = [];
-  for (let i = 0; i < N; i++) {
-    pos[i * 3] = (Math.random() - .5) * 32;
-    pos[i * 3 + 1] = (Math.random() - .5) * 20;
-    pos[i * 3 + 2] = (Math.random() - .5) * 6;
-    vel.push((Math.random() - .5) * .004, (Math.random() - .5) * .004, 0);
-  }
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  const mat = new THREE.PointsMaterial({ color: 0xFF5500, size: .055, transparent: true, opacity: .55 });
-  const pts = new THREE.Points(geo, mat);
-  scene.add(pts);
-
-  /* connection lines */
-  const lp = [];
-  const THRESH = 4;
-  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
-    const dx = pos[i*3]-pos[j*3], dy = pos[i*3+1]-pos[j*3+1];
-    if (Math.sqrt(dx*dx+dy*dy) < THRESH)
-      lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
-  }
-  const lgeo = new THREE.BufferGeometry();
-  lgeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lp), 3));
-  scene.add(new THREE.LineSegments(lgeo, new THREE.LineBasicMaterial({ color: 0xFF5500, transparent: true, opacity: .05 })));
-
-  let mx2 = 0, my2 = 0;
-  window.addEventListener('mousemove', e => { mx2=(e.clientX/W-.5)*2; my2=-(e.clientY/H-.5)*1.5; });
-  window.addEventListener('resize', () => {
-    cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
-  });
-
-  let t = 0;
-  (function anim() {
-    requestAnimationFrame(anim); t++;
-    for (let i = 0; i < N; i++) {
-      pos[i*3] += vel[i*3]; pos[i*3+1] += vel[i*3+1];
-      if (Math.abs(pos[i*3]) > 16) vel[i*3] *= -1;
-      if (Math.abs(pos[i*3+1]) > 10) vel[i*3+1] *= -1;
-    }
-    geo.attributes.position.needsUpdate = true;
-    pts.rotation.y = t * .0003;
-    cam.position.x += (mx2 * .9 - cam.position.x) * .025;
-    cam.position.y += (my2 * .6 - cam.position.y) * .025;
-    renderer.render(scene, cam);
+/* ══ GRAIN ══ */
+(function(){
+  const c=document.getElementById('grain');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=innerWidth;c.height=innerHeight;c.style.cssText='position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.38;mix-blend-mode:screen'}
+  window.addEventListener('resize',resize);resize();
+  (function frame(){
+    requestAnimationFrame(frame);
+    const img=ctx.createImageData(c.width,c.height);
+    const d=img.data;
+    for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16}
+    ctx.putImageData(img,0,0);
   })();
 })();
 
-/* ─── HERO ENTRANCE ─── */
-const heroWords = document.querySelectorAll('.hero-title .word');
-heroWords.forEach(w => {
-  const text = w.textContent;
-  w.innerHTML = text.split('').map(c => `<span class="char" style="display:inline-block;transform:translateY(110%)">${c}</span>`).join('');
-  if (w.classList.contains('accent')) w.querySelectorAll('.char').forEach(c => c.style.color = 'var(--o)');
+/* ══ CURSOR ══ */
+const cur=document.getElementById('cur'),curf=document.getElementById('curf');
+let mx=innerWidth/2,my=innerHeight/2,fx=mx,fy=my;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+document.querySelectorAll('a,button,input').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('h-on'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('h-on'));
+});
+(function follow(){requestAnimationFrame(follow);fx+=(mx-fx)*.1;fy+=(my-fy)*.1;curf.style.left=fx+'px';curf.style.top=fy+'px'})();
+
+/* ══ THREE.JS PARTICLES ══ */
+(function(){
+  const cvs=document.getElementById('bg');
+  const renderer=new THREE.WebGLRenderer({canvas:cvs,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,100);
+  cam.position.z=13;
+  const N=280,pos=new Float32Array(N*3),vel=[];
+  for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*36;pos[i*3+1]=(Math.random()-.5)*22;pos[i*3+2]=(Math.random()-.5)*5;vel.push((Math.random()-.5)*.003,(Math.random()-.5)*.003,0)}
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  scene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xFF5500,size:.052,transparent:true,opacity:.48})));
+  const lp=[];
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=pos[i*3]-pos[j*3],dy=pos[i*3+1]-pos[j*3+1];if(dx*dx+dy*dy<14)lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2])}
+  const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(lp),3));
+  scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xFF5500,transparent:true,opacity:.038})));
+  let m2x=0,m2y=0;
+  window.addEventListener('mousemove',e=>{m2x=(e.clientX/innerWidth-.5)*2;m2y=-(e.clientY/innerHeight-.5)*1.5});
+  window.addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+  (function anim(){requestAnimationFrame(anim);for(let i=0;i<N;i++){pos[i*3]+=vel[i*3];pos[i*3+1]+=vel[i*3+1];if(Math.abs(pos[i*3])>18)vel[i*3]*=-1;if(Math.abs(pos[i*3+1])>11)vel[i*3+1]*=-1}geo.attributes.position.needsUpdate=true;cam.position.x+=(m2x*.8-cam.position.x)*.025;cam.position.y+=(m2y*.5-cam.position.y)*.025;renderer.render(scene,cam)})();
+})();
+
+/* ══ STATEMENT WORDS ══ */
+const stmtWords=[
+  ['BIM',false],['is',true],['meer',false],['dan',false],['software.',true],
+  ['Het',false],['is',false],['hoe',false],['de',true],['bouw',true],
+  ['van',false],['morgen',true],['gebouwd',false],['wordt.',false]
+];
+const stmtEl=document.getElementById('stmt-el');
+stmtWords.forEach(([txt,acc])=>{
+  const w=document.createElement('span');w.className='s-word'+(acc?' acc':'');
+  txt.split('').forEach(ch=>{const c=document.createElement('span');c.className='s-char';c.textContent=ch;w.appendChild(c)});
+  stmtEl.appendChild(w);stmtEl.appendChild(document.createTextNode(' '));
 });
 
-gsap.timeline({ delay: .2, defaults: { ease: 'power4.out' } })
-  .from('#hero-logo', { opacity: 0, y: 36, duration: 1 })
-  .from('.hero-kicker', { opacity: 0, duration: .7 }, '-=.5')
-  .to('.hero-title .char', { y: '0%', stagger: .03, duration: .9 }, '-=.4')
-  .to('#hero-sub', { opacity: 1, y: 0, duration: .9 }, '-=.4')
-  .to('#scroll-cta', { opacity: 1, duration: .6 }, '-=.2');
+/* ══ LOADER ══ */
+const ldrEl=document.getElementById('loader'),ldrNum=document.getElementById('l-num'),ldrBar=document.getElementById('l-bar');
+let p=0;
+const ti=setInterval(()=>{
+  p=Math.min(100,p+Math.random()*3.5+.5);
+  ldrNum.textContent=Math.floor(p);ldrBar.style.width=p+'%';
+  if(p>82)ldrNum.style.color='var(--o)';
+  if(p>=100){clearInterval(ti);ldrNum.textContent='100';setTimeout(boot,220)}
+},38);
 
-/* ─── HORIZONTAL SCROLL ─── */
-const track = document.getElementById('horiz-track');
-gsap.to(track, {
-  x: () => -(track.scrollWidth - innerWidth),
-  ease: 'none',
-  scrollTrigger: {
-    trigger: '#s-horiz',
-    pin: true,
-    scrub: 1.2,
-    end: () => '+=' + (track.scrollWidth - innerWidth),
-    invalidateOnRefresh: true
-  }
-});
+function boot(){
+  gsap.registerPlugin(ScrollTrigger);
 
-/* ─── STATEMENT CHARS ─── */
-gsap.to('.stmt-text .char', {
-  opacity: 1, y: '0%', rotateX: 0,
-  stagger: .015,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: '.s-statement',
-    start: 'top bottom',
-    end: 'center center',
-    scrub: 1.8
-  }
-});
+  /* hide loader with curtain wipe */
+  gsap.to(ldrEl,{yPercent:-100,duration:1.1,ease:'power4.inOut',onComplete:()=>ldrEl.remove()});
 
-/* ─── WHO CHIPS ─── */
-gsap.to('.who-chip', {
-  opacity: 1, y: 0, scale: 1,
-  stagger: .06,
-  ease: 'back.out(1.4)',
-  scrollTrigger: {
-    trigger: '#who-grid',
-    start: 'top 82%',
-    end: 'bottom 60%',
-    scrub: .8
-  }
-});
+  /* Lenis */
+  const lenis=new Lenis({lerp:.075,smoothWheel:true});
+  lenis.on('scroll',ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
 
-/* ─── CTA ─── */
-gsap.from('.s-cta .cta-title', {
-  y: 70, opacity: 0, ease: 'power3.out',
-  scrollTrigger: { trigger: '.s-cta', start: 'top 75%', toggleActions: 'play none none reverse' }
-});
+  /* hero entrance */
+  gsap.timeline({delay:.25,defaults:{ease:'power4.out'}})
+    .to('#h-kicker',{opacity:1,y:0,duration:.75})
+    .to('.h-line span',{y:'0%',stagger:.07,duration:1.05},'-=.45')
+    .to('#h-meta',{opacity:1,y:0,duration:.85},'-=.45');
 
-/* ─── FORM SUBMIT ─── */
-function formSub(e) {
-  e.preventDefault();
-  const btn = e.target.querySelector('button');
-  const inp = e.target.querySelector('input');
-  btn.textContent = 'Ingeschreven ✓';
-  btn.style.background = '#22c55e';
-  inp.disabled = btn.disabled = true;
+  /* horizontal scroll */
+  const track=document.getElementById('h-track');
+  gsap.to(track,{
+    x:()=>-(track.scrollWidth-innerWidth),ease:'none',
+    scrollTrigger:{
+      trigger:'#panels',pin:true,scrub:1.3,
+      end:()=>'+='+(track.scrollWidth-innerWidth),
+      invalidateOnRefresh:true,
+      onUpdate(s){document.getElementById('sec-n').textContent=String(Math.round(s.progress*3)+1).padStart(2,'0')}
+    }
+  });
+
+  /* statement chars */
+  gsap.to('.s-char',{opacity:1,y:'0%',rotateX:0,stagger:.01,ease:'power3.out',
+    scrollTrigger:{trigger:'.s-stmt',start:'top bottom',end:'center center',scrub:2}
+  });
+
+  /* chips */
+  gsap.to('.chip',{opacity:1,y:0,scale:1,stagger:.045,ease:'back.out(1.3)',
+    scrollTrigger:{trigger:'#who-grid',start:'top 83%',end:'bottom 62%',scrub:.65}
+  });
+
+  /* cta */
+  gsap.from('#cta-title',{y:70,opacity:0,ease:'power3.out',
+    scrollTrigger:{trigger:'#cta',start:'top 76%',toggleActions:'play none none reverse'}
+  });
 }
-window.formSub = formSub;
+
+/* ══ FORM ══ */
+function doSub(e){
+  e.preventDefault();
+  const b=e.target.querySelector('button'),i=e.target.querySelector('input');
+  b.textContent='Ingeschreven ✓';b.style.background='#16a34a';i.disabled=b.disabled=true;
+}
+window.doSub=doSub;
 </script>
 </body>
 </html>
