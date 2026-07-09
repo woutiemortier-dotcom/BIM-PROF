@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIM Professionals Belgium</title>
+<meta name="description" content="Het exclusieve netwerk- en kennisevent voor BIM-specialisten in België.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="plugins/splitting.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--o:#FF5500;--b:#0A0A0A;--w:#fff;--dim:rgba(255,255,255,.4)}
+html{overflow-x:hidden}
+body{background:var(--b);color:var(--w);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;background:var(--o);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#curf{position:fixed;width:40px;height:40px;border:1px solid rgba(255,85,0,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
+.hover-active #curf{width:64px;height:64px;border-color:var(--o)}
+
+/* CANVAS */
+#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.85}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:22px 52px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:-.2px}
+.nav-pill{font-size:9px;letter-spacing:3px;border:1px solid var(--o);color:var(--o);padding:5px 16px;border-radius:20px}
+
+/* HERO */
+.s-hero{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 5vw 0;overflow:hidden}
+.hero-logo{margin-bottom:52px}
+.hero-kicker{font-size:10px;letter-spacing:6px;color:var(--o);margin-bottom:22px}
+.hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(44px,9vw,104px);line-height:1.0;letter-spacing:-3px}
+.hero-title .word{display:inline-block;overflow:hidden;margin:0 4px}
+.hero-title .char{display:inline-block;transform:translateY(110%)}
+.hero-title .accent{color:var(--o)}
+.hero-sub{font-size:clamp(14px,1.6vw,18px);color:var(--dim);max-width:540px;line-height:1.9;margin:36px auto 0;opacity:0;transform:translateY(24px)}
+.scroll-cta{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0}
+.scroll-cta p{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,.25)}
+.scroll-line{width:1px;height:52px;background:linear-gradient(to bottom,transparent,var(--o));animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:0;transform:scaleY(.3);transform-origin:top}60%{opacity:1;transform:scaleY(1)}}
+
+/* MARQUEE */
+.marquee-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:18px 0;background:rgba(255,85,0,.03)}
+.marquee-inner{display:flex;white-space:nowrap;animation:scroll 22s linear infinite}
+.marquee-inner:hover{animation-play-state:paused}
+.m-item{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(16px,2.5vw,24px);letter-spacing:2px;padding:0 44px;color:rgba(255,255,255,.12)}
+.m-item .dot{color:var(--o)}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* HORIZONTAL PANELS */
+.s-horiz{position:relative;z-index:1}
+.horiz-track{display:flex}
+.h-panel{width:100vw;min-height:100vh;flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;padding:80px 10vw 80px;border-right:1px solid rgba(255,255,255,.05);overflow:hidden;position:relative}
+.panel-bg-num{position:absolute;right:8vw;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(140px,22vw,280px);color:rgba(255,85,0,.04);line-height:1;pointer-events:none;user-select:none}
+.panel-tag{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:20px}
+.panel-title{font-family:'Syne',sans-serif;font-size:clamp(40px,6.5vw,80px);font-weight:800;line-height:1.08;margin-bottom:28px}
+.panel-desc{font-size:clamp(14px,1.5vw,17px);color:var(--dim);max-width:500px;line-height:1.85}
+.panel-dots{display:flex;gap:8px;margin-top:52px}
+.dot-el{height:2px;border-radius:2px;background:rgba(255,255,255,.15);transition:width .4s,background .4s}
+.dot-el.on{background:var(--o)}
+
+/* STATEMENT */
+.s-statement{position:relative;z-index:1;min-height:220vh}
+.stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;padding:0 8vw;overflow:hidden}
+.stmt-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,6.5vw,84px);line-height:1.2;text-align:center;max-width:900px}
+/* Splitting chars */
+.stmt-text .word{overflow:hidden;display:inline-block;margin:0 8px}
+.stmt-text .char{display:inline-block;opacity:.1;transform:translateY(60%) rotateX(-40deg);transform-origin:bottom}
+.stmt-text .char.accent{color:var(--o)}
+
+/* WHO */
+.s-who{position:relative;z-index:1;padding:130px 10vw}
+.who-label{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:20px}
+.who-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,5vw,64px);line-height:1.1;max-width:660px;margin-bottom:72px}
+.who-grid{display:flex;flex-wrap:wrap;gap:12px}
+.who-chip{border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:14px 30px;font-size:clamp(13px,1.3vw,16px);color:rgba(255,255,255,.5);opacity:0;transform:translateY(28px) scale(.94)}
+
+/* CTA */
+.s-cta{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 5vw;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.cta-label{font-size:10px;letter-spacing:5px;color:var(--o);margin-bottom:24px}
+.cta-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(40px,7vw,88px);line-height:1.0;letter-spacing:-2px;margin-bottom:28px}
+.cta-title .accent{color:var(--o)}
+.cta-sub{color:var(--dim);max-width:480px;font-size:17px;line-height:1.85;margin:0 auto 52px}
+.cta-form{display:flex;max-width:480px;width:100%;margin:0 auto;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:8px}
+.cta-form input{flex:1;background:rgba(255,255,255,.04);border:none;outline:none;padding:18px 22px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:#fff}
+.cta-form input::placeholder{color:rgba(255,255,255,.2)}
+.cta-form button{background:var(--o);border:none;padding:18px 26px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;letter-spacing:1.5px;color:#fff;cursor:none;white-space:nowrap;transition:background .2s}
+.cta-form button:hover{background:#d94700}
+.cta-note{margin-top:20px;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.18)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;padding:28px 52px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer p,footer a{font-size:11px;color:rgba(255,255,255,.2);text-decoration:none;transition:color .2s}
+footer a:hover{color:var(--o)}
+
+/* UTILS */
+.clip-reveal{clip-path:inset(0 100% 0 0)}
+
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  .h-panel{padding:60px 6vw}
+  .s-who{padding:80px 6vw}
+  footer{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="curf"></div>
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <svg viewBox="0 0 200 185" width="30" height="28">
+      <polygon points="10,18 152,18 178,54 36,54" fill="#2A2A2A"/>
+      <polygon points="152,18 178,54 178,152 152,116" fill="#1E1E1E"/>
+      <path d="M 22,20 C 60,17 120,17 144,20 Q 154,21 154,32 L 154,108 Q 154,118 142,118 L 22,118 Q 10,118 10,108 L 10,32 Q 10,19 22,20 Z" fill="#1E1E1E" stroke="#444" stroke-width="1" stroke-linejoin="round"/>
+      <path d="M 36,38 C 74,35 134,35 158,38 Q 168,39 168,50 L 168,126 Q 168,136 156,136 L 36,136 Q 24,136 24,126 L 24,50 Q 24,37 36,38 Z" fill="#2A2A2A" stroke="#666" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#111" stroke="#CCC" stroke-width="2" stroke-linejoin="round"/>
+      <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
+      <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
+      <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
+    </svg>
+    BIM Professionals Belgium
+  </div>
+  <div class="nav-pill">EDITIE 1 · 2026</div>
+</nav>
+
+<!-- HERO -->
+<section class="s-hero">
+  <div class="hero-logo" id="hero-logo">
+    <svg viewBox="0 0 200 185" width="110" height="102">
+      <polygon points="10,18 152,18 178,54 36,54" fill="#2A2A2A"/>
+      <line x1="56" y1="18" x2="82" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
+      <line x1="92" y1="18" x2="118" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
+      <line x1="128" y1="18" x2="154" y2="54" stroke="#3A3A3A" stroke-width=".8"/>
+      <polygon points="152,18 178,54 178,152 152,116" fill="#1E1E1E"/>
+      <line x1="156" y1="50" x2="174" y2="76" stroke="#333" stroke-width=".6"/>
+      <line x1="156" y1="78" x2="174" y2="104" stroke="#333" stroke-width=".6"/>
+      <line x1="156" y1="106" x2="174" y2="132" stroke="#333" stroke-width=".6"/>
+      <line x1="10" y1="116" x2="36" y2="152" stroke="#444" stroke-width=".8"/>
+      <path d="M 22,20 C 60,17 120,17 144,20 Q 154,21 154,32 L 154,108 Q 154,118 142,118 L 22,118 Q 10,118 10,108 L 10,32 Q 10,19 22,20 Z" fill="#1E1E1E" stroke="#555" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M 36,38 C 74,35 134,35 158,38 Q 168,39 168,50 L 168,126 Q 168,136 156,136 L 36,136 Q 24,136 24,126 L 24,50 Q 24,37 36,38 Z" fill="#2A2A2A" stroke="#777" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#0A0A0A" stroke="#DDD" stroke-width="2.2" stroke-linejoin="round"/>
+      <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
+      <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
+      <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
+    </svg>
+  </div>
+  <div class="hero-kicker">BIM PROFESSIONALS BELGIUM</div>
+  <h1 class="hero-title" id="hero-title">
+    <span class="word">Waar</span>
+    <span class="word">de</span>
+    <span class="word">Belgische</span>
+    <span class="word accent">BIM&#x2011;sector</span>
+    <span class="word">samenkomt.</span>
+  </h1>
+  <p class="hero-sub" id="hero-sub">Het exclusieve netwerk- en kennisevent voor BIM-specialisten. Keynotes, cross-company kennisdeling en netwerken — voor de mensen die BIM écht begrijpen.</p>
+  <div class="scroll-cta" id="scroll-cta"><p>SCROLL</p><div class="scroll-line"></div></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="m-item">KEYNOTES <span class="dot">·</span></span>
+    <span class="m-item">KENNISDELING <span class="dot">·</span></span>
+    <span class="m-item">NETWERK <span class="dot">·</span></span>
+    <span class="m-item">BIM <span class="dot">·</span></span>
+    <span class="m-item">BELGIË <span class="dot">·</span></span>
+    <span class="m-item">INVITE ONLY <span class="dot">·</span></span>
+    <span class="m-item">EDITIE 1 <span class="dot">·</span></span>
+    <span class="m-item">2026 <span class="dot">·</span></span>
+    <span class="m-item">KEYNOTES <span class="dot">·</span></span>
+    <span class="m-item">KENNISDELING <span class="dot">·</span></span>
+    <span class="m-item">NETWERK <span class="dot">·</span></span>
+    <span class="m-item">BIM <span class="dot">·</span></span>
+    <span class="m-item">BELGIË <span class="dot">·</span></span>
+    <span class="m-item">INVITE ONLY <span class="dot">·</span></span>
+    <span class="m-item">EDITIE 1 <span class="dot">·</span></span>
+    <span class="m-item">2026 <span class="dot">·</span></span>
+  </div>
+</div>
+
+<!-- HORIZONTAL PANELS -->
+<section class="s-horiz" id="s-horiz">
+  <div id="horiz-track" class="horiz-track">
+
+    <div class="h-panel">
+      <div class="panel-bg-num">01</div>
+      <div class="panel-tag">KEYNOTES</div>
+      <h2 class="panel-title">Diepgang<br>zonder ruis.</h2>
+      <p class="panel-desc">Lezingen van mensen die BIM op het hoogste niveau toepassen — in België en ver daarbuiten. Geen verkooppraatjes. Alleen inhoud die je sector vooruitbrengt.</p>
+      <div class="panel-dots"><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div></div>
+    </div>
+
+    <div class="h-panel">
+      <div class="panel-bg-num">02</div>
+      <div class="panel-tag">KENNISDELING</div>
+      <h2 class="panel-title">Wat normaal<br>binnen muren blijft.</h2>
+      <p class="panel-desc">Cross-company gesprekken over wat werkt, wat mislukt en wat de sector écht vooruitbrengt. Kennis die normaal achter gesloten deuren blijft — hier gedeeld.</p>
+      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div></div>
+    </div>
+
+    <div class="h-panel">
+      <div class="panel-bg-num">03</div>
+      <div class="panel-tag">NETWERK</div>
+      <h2 class="panel-title">De juiste mensen<br>in één zaal.</h2>
+      <p class="panel-desc">Een zaal vol BIM-specialisten die begrijpen waar je het over hebt. Geen beginners, geen verkopers — alleen mensen op jouw niveau die klaar zijn om te connecteren.</p>
+      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div><div class="dot-el" style="width:24px"></div></div>
+    </div>
+
+    <div class="h-panel" style="background:rgba(255,85,0,.03);border-right:none">
+      <div class="panel-bg-num" style="color:rgba(255,85,0,.07)">→</div>
+      <div class="panel-tag">EDITIE 1 · 2026</div>
+      <h2 class="panel-title" style="color:var(--o)">Jij bent<br>uitgenodigd.</h2>
+      <p class="panel-desc">De eerste editie. Invite only. Beperkt aantal plaatsen. Schrijf je in voor updates en wees er als eerste bij.</p>
+      <form style="display:flex;margin-top:44px;overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:7px;max-width:420px" onsubmit="formSub(event)">
+        <input type="email" placeholder="jouw@email.be" required style="flex:1;background:rgba(255,255,255,.05);border:none;outline:none;padding:17px 20px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#fff">
+        <button type="submit" style="background:var(--o);border:none;padding:17px 22px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:500;letter-spacing:1px;color:#fff;cursor:none;white-space:nowrap">Inschrijven</button>
+      </form>
+      <div class="panel-dots"><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el" style="width:24px"></div><div class="dot-el on" style="width:48px"></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="s-statement">
+  <div class="stmt-sticky">
+    <p class="stmt-text" id="stmt-text">
+      <span class="word"><span class="char">B</span><span class="char">I</span><span class="char">M</span></span>
+      <span class="word accent"><span class="char">i</span><span class="char">s</span></span>
+      <span class="word"><span class="char">m</span><span class="char">e</span><span class="char">e</span><span class="char">r</span></span>
+      <span class="word"><span class="char">d</span><span class="char">a</span><span class="char">n</span></span>
+      <span class="word accent"><span class="char">s</span><span class="char">o</span><span class="char">f</span><span class="char">t</span><span class="char">w</span><span class="char">a</span><span class="char">r</span><span class="char">e</span><span class="char">.</span></span>
+      <span class="word"><span class="char">H</span><span class="char">e</span><span class="char">t</span></span>
+      <span class="word"><span class="char">i</span><span class="char">s</span></span>
+      <span class="word"><span class="char">h</span><span class="char">o</span><span class="char">e</span></span>
+      <span class="word accent"><span class="char">d</span><span class="char">e</span></span>
+      <span class="word accent"><span class="char">b</span><span class="char">o</span><span class="char">u</span><span class="char">w</span></span>
+      <span class="word"><span class="char">v</span><span class="char">a</span><span class="char">n</span></span>
+      <span class="word accent"><span class="char">m</span><span class="char">o</span><span class="char">r</span><span class="char">g</span><span class="char">e</span><span class="char">n</span></span>
+      <span class="word"><span class="char">g</span><span class="char">e</span><span class="char">b</span><span class="char">o</span><span class="char">u</span><span class="char">w</span><span class="char">d</span></span>
+      <span class="word"><span class="char">w</span><span class="char">o</span><span class="char">r</span><span class="char">d</span><span class="char">t</span><span class="char">.</span></span>
+    </p>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="s-who">
+  <div class="who-label">VOOR WIE</div>
+  <h2 class="who-title">Dit is niet voor iedereen.<br>Dat is het punt.</h2>
+  <div class="who-grid" id="who-grid">
+    <span class="who-chip">BIM Managers</span>
+    <span class="who-chip">BIM Coördinatoren</span>
+    <span class="who-chip">BIM Modelleurs</span>
+    <span class="who-chip">VDC Specialisten</span>
+    <span class="who-chip">Projectleiders</span>
+    <span class="who-chip">Architecten</span>
+    <span class="who-chip">Digital Twin experts</span>
+    <span class="who-chip">Constructie-engineers</span>
+    <span class="who-chip">GIS & BIM</span>
+    <span class="who-chip">BIM Consultants</span>
+    <span class="who-chip">Infra & openbare werken</span>
+    <span class="who-chip">Facility managers</span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="s-cta">
+  <div class="cta-label">EERSTE EDITIE · BELGIË · 2026</div>
+  <h2 class="cta-title">Wees erbij van<br>het <span class="accent">begin.</span></h2>
+  <p class="cta-sub">Schrijf je in voor updates. Leden krijgen als eersten toegang — het aantal plaatsen is beperkt en het wordt invite only.</p>
+  <form class="cta-form" onsubmit="formSub(event)">
+    <input type="email" placeholder="jouw@email.be" required>
+    <button type="submit">Houd mij op de hoogte</button>
+  </form>
+  <p class="cta-note">Geen spam. Alleen updates over editie 1.</p>
+</section>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:10px">
+    <svg viewBox="0 0 200 185" width="20" height="19">
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#1A1A1A" stroke="#444" stroke-width="2"/>
+      <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
+      <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
+      <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
+    </svg>
+    <p>© 2026 BIM Professionals Belgium</p>
+  </div>
+  <div style="display:flex;gap:24px">
+    <a href="mailto:info@bimprofessionals.be">info@bimprofessionals.be</a>
+    <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script src="plugins/splitting.min.js"></script>
+<script src="plugins/three.min.js"></script>
+<script src="plugins/gsap.min.js"></script>
+<script src="plugins/ScrollTrigger.min.js"></script>
+<script src="plugins/lenis.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ─── LENIS SMOOTH SCROLL ─── */
+const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ─── CURSOR ─── */
+const cur = document.getElementById('cur');
+const curf = document.getElementById('curf');
+let mx = 0, my = 0, fx = 0, fy = 0;
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function loop() {
+  requestAnimationFrame(loop);
+  fx += (mx - fx) * 0.1; fy += (my - fy) * 0.1;
+  curf.style.left = fx + 'px'; curf.style.top = fy + 'px';
+})();
+document.querySelectorAll('a,button,input').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+});
+
+/* ─── THREE.JS PARTICLE NETWORK ─── */
+(function () {
+  const canvas = document.getElementById('bg');
+  const W = window.innerWidth, H = window.innerHeight;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(W, H);
+
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(65, W / H, 0.1, 100);
+  cam.position.z = 14;
+
+  const N = 260;
+  const pos = new Float32Array(N * 3);
+  const vel = [];
+  for (let i = 0; i < N; i++) {
+    pos[i * 3] = (Math.random() - .5) * 32;
+    pos[i * 3 + 1] = (Math.random() - .5) * 20;
+    pos[i * 3 + 2] = (Math.random() - .5) * 6;
+    vel.push((Math.random() - .5) * .004, (Math.random() - .5) * .004, 0);
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({ color: 0xFF5500, size: .055, transparent: true, opacity: .55 });
+  const pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+
+  /* connection lines */
+  const lp = [];
+  const THRESH = 4;
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const dx = pos[i*3]-pos[j*3], dy = pos[i*3+1]-pos[j*3+1];
+    if (Math.sqrt(dx*dx+dy*dy) < THRESH)
+      lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2]);
+  }
+  const lgeo = new THREE.BufferGeometry();
+  lgeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(lp), 3));
+  scene.add(new THREE.LineSegments(lgeo, new THREE.LineBasicMaterial({ color: 0xFF5500, transparent: true, opacity: .05 })));
+
+  let mx2 = 0, my2 = 0;
+  window.addEventListener('mousemove', e => { mx2=(e.clientX/W-.5)*2; my2=-(e.clientY/H-.5)*1.5; });
+  window.addEventListener('resize', () => {
+    cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+
+  let t = 0;
+  (function anim() {
+    requestAnimationFrame(anim); t++;
+    for (let i = 0; i < N; i++) {
+      pos[i*3] += vel[i*3]; pos[i*3+1] += vel[i*3+1];
+      if (Math.abs(pos[i*3]) > 16) vel[i*3] *= -1;
+      if (Math.abs(pos[i*3+1]) > 10) vel[i*3+1] *= -1;
+    }
+    geo.attributes.position.needsUpdate = true;
+    pts.rotation.y = t * .0003;
+    cam.position.x += (mx2 * .9 - cam.position.x) * .025;
+    cam.position.y += (my2 * .6 - cam.position.y) * .025;
+    renderer.render(scene, cam);
+  })();
+})();
+
+/* ─── HERO ENTRANCE ─── */
+const heroWords = document.querySelectorAll('.hero-title .word');
+heroWords.forEach(w => {
+  const text = w.textContent;
+  w.innerHTML = text.split('').map(c => `<span class="char" style="display:inline-block;transform:translateY(110%)">${c}</span>`).join('');
+  if (w.classList.contains('accent')) w.querySelectorAll('.char').forEach(c => c.style.color = 'var(--o)');
+});
+
+gsap.timeline({ delay: .2, defaults: { ease: 'power4.out' } })
+  .from('#hero-logo', { opacity: 0, y: 36, duration: 1 })
+  .from('.hero-kicker', { opacity: 0, duration: .7 }, '-=.5')
+  .to('.hero-title .char', { y: '0%', stagger: .03, duration: .9 }, '-=.4')
+  .to('#hero-sub', { opacity: 1, y: 0, duration: .9 }, '-=.4')
+  .to('#scroll-cta', { opacity: 1, duration: .6 }, '-=.2');
+
+/* ─── HORIZONTAL SCROLL ─── */
+const track = document.getElementById('horiz-track');
+gsap.to(track, {
+  x: () => -(track.scrollWidth - innerWidth),
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#s-horiz',
+    pin: true,
+    scrub: 1.2,
+    end: () => '+=' + (track.scrollWidth - innerWidth),
+    invalidateOnRefresh: true
+  }
+});
+
+/* ─── STATEMENT CHARS ─── */
+gsap.to('.stmt-text .char', {
+  opacity: 1, y: '0%', rotateX: 0,
+  stagger: .015,
+  ease: 'power2.out',
+  scrollTrigger: {
+    trigger: '.s-statement',
+    start: 'top bottom',
+    end: 'center center',
+    scrub: 1.8
+  }
+});
+
+/* ─── WHO CHIPS ─── */
+gsap.to('.who-chip', {
+  opacity: 1, y: 0, scale: 1,
+  stagger: .06,
+  ease: 'back.out(1.4)',
+  scrollTrigger: {
+    trigger: '#who-grid',
+    start: 'top 82%',
+    end: 'bottom 60%',
+    scrub: .8
+  }
+});
+
+/* ─── CTA ─── */
+gsap.from('.s-cta .cta-title', {
+  y: 70, opacity: 0, ease: 'power3.out',
+  scrollTrigger: { trigger: '.s-cta', start: 'top 75%', toggleActions: 'play none none reverse' }
+});
+
+/* ─── FORM SUBMIT ─── */
+function formSub(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const inp = e.target.querySelector('input');
+  btn.textContent = 'Ingeschreven ✓';
+  btn.style.background = '#22c55e';
+  inp.disabled = btn.disabled = true;
+}
+window.formSub = formSub;
+</script>
+</body>
+</html>
