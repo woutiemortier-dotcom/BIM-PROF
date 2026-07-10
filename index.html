@@ -363,6 +363,9 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 <script src="plugins/lenis.min.js"></script>
 <script>
 
+/* ══ ALL JS IN ONE IIFE — no global scope conflicts ══ */
+(function(){
+
 /* ══ GRAIN ══ */
 (function(){
   const c=document.getElementById('grain');
@@ -427,12 +430,12 @@ stmtWords.forEach(([txt,acc])=>{
 
 /* ══ LOADER ══ */
 const ldrEl=document.getElementById('loader'),ldrNum=document.getElementById('l-num'),ldrBar=document.getElementById('l-bar');
-let p=0;
-const ti=setInterval(()=>{
-  p=Math.min(100,p+Math.random()*3.5+.5);
-  ldrNum.textContent=Math.floor(p);ldrBar.style.width=p+'%';
-  if(p>82)ldrNum.style.color='var(--o)';
-  if(p>=100){clearInterval(ti);ldrNum.textContent='100';setTimeout(boot,220)}
+let loadPct=0;
+const loadTimer=setInterval(()=>{
+  loadPct=Math.min(100,loadPct+Math.random()*3.5+.5);
+  ldrNum.textContent=Math.floor(loadPct);ldrBar.style.width=loadPct+'%';
+  if(loadPct>82)ldrNum.style.color='var(--o)';
+  if(loadPct>=100){clearInterval(loadTimer);ldrNum.textContent='100';setTimeout(boot,220)}
 },38);
 
 function boot(){
@@ -488,6 +491,8 @@ function doSub(e){
   b.textContent='Ingeschreven ✓';b.style.background='#16a34a';i.disabled=b.disabled=true;
 }
 window.doSub=doSub;
+
+})(); /* end outer IIFE */
 </script>
 </body>
 </html>
