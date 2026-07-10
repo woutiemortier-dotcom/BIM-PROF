@@ -131,14 +131,52 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 .f-r a{font-size:11px;color:rgba(250,250,248,.16);text-decoration:none;transition:color .2s;letter-spacing:.5px}
 .f-r a:hover{color:var(--o)}
 
+/* ─── STATS ─── */
+.s-stats{position:relative;z-index:1;padding:100px 8vw;border-top:1px solid var(--dim2)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat-card{
+  position:relative;
+  border:1px solid var(--dim2);
+  border-radius:12px;
+  padding:36px 32px 32px;
+  background:rgba(250,250,248,.02);
+  transform-style:preserve-3d;
+  transition:border-color .3s;
+  overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;inset:0;border-radius:12px;
+  background:radial-gradient(circle at 60% 30%,rgba(255,85,0,.06),transparent 70%);
+  opacity:0;transition:opacity .4s;
+}
+.stat-card:hover{border-color:rgba(255,85,0,.25)}
+.stat-card:hover::before{opacity:1}
+.stat-card--accent{border-color:rgba(255,85,0,.3);background:rgba(255,85,0,.04)}
+.stat-card--accent::before{opacity:1}
+.stat-tag{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.25);margin-bottom:20px}
+.stat-num{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(56px,7vw,96px);
+  line-height:1;letter-spacing:-3px;
+  color:var(--w);margin-bottom:16px;
+}
+.stat-card--accent .stat-num{color:var(--o)}
+.stat-desc{font-size:13px;color:rgba(250,250,248,.3);line-height:1.7;max-width:200px}
+
 @media(max-width:900px){
   nav{padding:16px 20px}.n-right .n-link{display:none}
   .s-hero{padding:0 5vw 6vh}
+  .s-stats{padding:60px 5vw}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .stat-card{padding:24px 20px}
   .s-who{grid-template-columns:1fr;gap:36px;padding:80px 5vw}
   .s-cta{padding:80px 5vw}
   .h-panel{padding:80px 5vw 52px}
   footer{padding:18px 20px}
   .side-l,.side-r,#sec-ctr{display:none}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -222,6 +260,37 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
     <span class="mq-it">2026 <span class="d">▪</span></span>
   </div>
 </div>
+
+<!-- STATS SECTION -->
+<section class="s-stats" id="stats">
+  <div class="stats-grid">
+
+    <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
+      <div class="stat-tag">SPECIALISTEN</div>
+      <div class="stat-num"><span class="count" data-target="250" data-suffix="+">0</span></div>
+      <div class="stat-desc">verwachte BIM-professionals op editie 1</div>
+    </div>
+
+    <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
+      <div class="stat-tag">BEDRIJVEN</div>
+      <div class="stat-num"><span class="count" data-target="40" data-suffix="+">0</span></div>
+      <div class="stat-desc">verschillende Belgische bouwbedrijven vertegenwoordigd</div>
+    </div>
+
+    <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
+      <div class="stat-tag">SPREKERS</div>
+      <div class="stat-num"><span class="count" data-target="8" data-suffix="">0</span></div>
+      <div class="stat-desc">keynote sprekers van toonaangevende projecten</div>
+    </div>
+
+    <div class="stat-card stat-card--accent" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+      <div class="stat-tag">EDITIE</div>
+      <div class="stat-num"><span class="count" data-target="1" data-suffix="">0</span></div>
+      <div class="stat-desc">de allereerste — invite only, beperkte plaatsen</div>
+    </div>
+
+  </div>
+</section>
 
 <!-- HORIZONTAL PANELS -->
 <section class="s-horiz" id="panels">
@@ -357,6 +426,8 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
   </div>
 </footer>
 
+<script src="plugins/vanilla-tilt.min.js"></script>
+<script src="plugins/countup.min.js"></script>
 <script src="plugins/three.min.js"></script>
 <script src="plugins/gsap.min.js"></script>
 <script src="plugins/ScrollTrigger.min.js"></script>
@@ -483,6 +554,39 @@ function boot(){
     scrollTrigger:{trigger:'#cta',start:'top 76%',toggleActions:'play none none reverse'}
   });
 }
+
+/* ══ VANILLA TILT + COUNTUP ══ */
+VanillaTilt.init(document.querySelectorAll('[data-tilt]'),{
+  max:12,speed:400,glare:true,'max-glare':.15,perspective:800
+});
+
+/* CountUp — trigger on scroll */
+const countEls=document.querySelectorAll('.count');
+let countsStarted=false;
+ScrollTrigger.create({
+  trigger:'#stats',
+  start:'top 80%',
+  onEnter:()=>{
+    if(countsStarted)return; countsStarted=true;
+    countEls.forEach(el=>{
+      const target=parseInt(el.dataset.target);
+      const suffix=el.dataset.suffix||'';
+      const cu=new countUp.CountUp(el,target,{
+        duration:2.2,
+        useEasing:true,
+        easingFn:(t,b,c,d)=>c*((t=t/d-1)*t*t+1)+b,
+        suffix
+      });
+      if(!cu.error)cu.start();
+    });
+  }
+});
+
+/* Stats cards entrance */
+gsap.from('.stat-card',{
+  y:60,opacity:0,stagger:.1,ease:'power3.out',
+  scrollTrigger:{trigger:'#stats',start:'top 75%',toggleActions:'play none none reverse'}
+});
 
 /* ══ FORM ══ */
 function doSub(e){
