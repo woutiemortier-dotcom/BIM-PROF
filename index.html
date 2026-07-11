@@ -7,14 +7,14 @@
 <meta name="description" content="Het exclusieve netwerk- en kennisevent voor BIM-specialisten in België. Keynotes, cross-company kennisdeling en netwerken.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=Caveat:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ─── RESET ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --o:#FF5500;--o2:#E63D00;
   --b:#080808;--w:#FAFAF8;
-  --dim:rgba(250,250,248,.38);--dim2:rgba(250,250,248,.1);
+  --dim:rgba(250,250,248,.38);--dim2:rgba(250,250,248,.08);
 }
 html{overflow-x:hidden;scroll-behavior:auto}
 body{background:var(--b);color:var(--w);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;cursor:none}
@@ -35,14 +35,9 @@ body.h-on #cur{transform:translate(-50%,-50%) scale(0);transition:transform .2s}
 #l-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--o);width:0;transition:width .05s linear}
 
 /* ─── SIDE LABELS ─── */
-.side-l,.side-r{position:fixed;font-size:9px;letter-spacing:4px;color:rgba(250,250,248,.12);z-index:100;writing-mode:vertical-rl;top:50%;pointer-events:none}
+.side-l,.side-r{position:fixed;font-size:9px;letter-spacing:4px;color:rgba(250,250,248,.1);z-index:100;writing-mode:vertical-rl;top:50%;pointer-events:none}
 .side-l{left:18px;transform:translateY(-50%) rotate(180deg)}
 .side-r{right:18px;transform:translateY(-50%)}
-
-/* ─── SEC COUNTER ─── */
-#sec-ctr{position:fixed;left:48px;bottom:32px;z-index:100;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:2px;color:rgba(250,250,248,.18);display:flex;align-items:center;gap:10px}
-#sec-ctr::before{content:'';display:block;width:22px;height:1px;background:rgba(250,250,248,.14)}
-#sec-n{color:var(--o)}
 
 /* ─── NAV ─── */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:24px 56px;display:flex;align-items:center;justify-content:space-between}
@@ -57,72 +52,149 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:24px 56px;display:fl
 
 /* ─── HERO ─── */
 .s-hero{position:relative;z-index:1;height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 6vw 8vh;overflow:hidden}
-.h-kicker{font-size:10px;letter-spacing:6px;color:var(--o);margin-bottom:22px;opacity:0;transform:translateY(14px)}
+.h-eyebrow{font-size:10px;letter-spacing:6px;color:rgba(250,250,248,.25);margin-bottom:18px;opacity:0;transform:translateY(14px)}
+.h-tagline{font-size:clamp(13px,1.4vw,16px);color:rgba(255,85,0,.7);letter-spacing:.5px;margin-bottom:28px;opacity:0;transform:translateY(14px)}
 .h-title-wrap{position:relative}
 .h-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(68px,12vw,170px);line-height:.93;letter-spacing:-5px}
 .h-line{display:block;overflow:hidden}
 .h-line span{display:block;transform:translateY(110%)}
-.h-ghost{position:absolute;top:0;left:0;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(68px,12vw,170px);line-height:.93;letter-spacing:-5px;-webkit-text-stroke:1.5px rgba(255,85,0,.18);color:transparent;transform:translate(5px,5px);pointer-events:none;z-index:-1;aria-hidden:true}
+.h-ghost{position:absolute;top:0;left:0;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(68px,12vw,170px);line-height:.93;letter-spacing:-5px;-webkit-text-stroke:1.5px rgba(255,85,0,.15);color:transparent;transform:translate(6px,6px);pointer-events:none;z-index:-1}
 .h-meta{display:flex;align-items:flex-end;justify-content:space-between;margin-top:36px;padding-top:22px;border-top:1px solid var(--dim2);opacity:0;transform:translateY(18px)}
-.h-sub{font-size:clamp(13px,1.3vw,16px);color:var(--dim);max-width:380px;line-height:1.9}
+.h-sub{font-size:clamp(13px,1.3vw,16px);color:var(--dim);max-width:400px;line-height:1.9}
 .h-scroll{display:flex;align-items:center;gap:10px;font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.18)}
 .s-dot{width:6px;height:6px;border-radius:50%;background:var(--o);animation:bl 1.8s ease infinite}
 @keyframes bl{0%,100%{opacity:.25}50%{opacity:1}}
 
 /* ─── MARQUEE ─── */
-.mq-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid var(--dim2);border-bottom:1px solid var(--dim2);padding:15px 0}
-.mq-track{display:flex;white-space:nowrap;animation:mq 30s linear infinite}
+.mq-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid var(--dim2);border-bottom:1px solid var(--dim2);padding:16px 0}
+.mq-track{display:flex;white-space:nowrap}
+.mq-fwd{animation:mq-f 32s linear infinite}
+.mq-rev{animation:mq-r 32s linear infinite}
 .mq-track:hover{animation-play-state:paused}
-.mq-it{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(12px,1.6vw,18px);letter-spacing:3px;padding:0 36px;color:rgba(250,250,248,.07);display:flex;align-items:center;gap:36px}
+.mq-it{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(11px,1.5vw,17px);letter-spacing:3px;padding:0 32px;color:rgba(250,250,248,.06);display:flex;align-items:center;gap:32px}
 .mq-it .d{color:var(--o)}
-@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq-it.lit{color:rgba(250,250,248,.22)}
+@keyframes mq-f{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mq-r{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 
-/* ─── HORIZ ─── */
-.s-horiz{position:relative;z-index:1}
-.h-track{display:flex}
-.h-panel{width:100vw;min-height:100vh;flex-shrink:0;display:grid;grid-template-rows:1fr auto;padding:110px 8vw 68px;border-right:1px solid var(--dim2);position:relative;overflow:hidden}
-.p-content{align-self:end}
-.p-bnum{position:absolute;right:5vw;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(160px,26vw,320px);color:rgba(255,85,0,.03);line-height:1;pointer-events:none;letter-spacing:-12px}
-.p-tag{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:16px}
-.p-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(46px,6.5vw,90px);line-height:1.0;margin-bottom:22px;letter-spacing:-2px}
-.p-title em{font-style:normal;-webkit-text-stroke:1px rgba(250,250,248,.25);color:transparent}
-.p-desc{font-size:clamp(14px,1.3vw,16px);color:var(--dim);max-width:460px;line-height:1.9}
-.p-prog{display:flex;gap:6px;margin-top:44px;align-items:center}
-.p-pl{height:1px;background:var(--dim2);transition:width .5s cubic-bezier(.23,1,.32,1),background .5s}
-.p-pl.on{background:var(--o)}
+/* ─── STATS ─── */
+.s-stats{position:relative;z-index:1;padding:100px 8vw;border-top:1px solid var(--dim2)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat-card{
+  position:relative;border:1px solid var(--dim2);border-radius:12px;
+  padding:36px 32px 32px;background:rgba(250,250,248,.018);
+  transform-style:preserve-3d;transition:border-color .3s;overflow:hidden;
+}
+.stat-card::before{content:'';position:absolute;inset:0;border-radius:12px;background:radial-gradient(circle at 60% 30%,rgba(255,85,0,.07),transparent 70%);opacity:0;transition:opacity .4s}
+.stat-card:hover{border-color:rgba(255,85,0,.22)}
+.stat-card:hover::before{opacity:1}
+.stat-card--accent{border-color:rgba(255,85,0,.28);background:rgba(255,85,0,.04)}
+.stat-card--accent::before{opacity:1}
+.stat-tag{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.22);margin-bottom:20px}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,7vw,96px);line-height:1;letter-spacing:-3px;color:var(--w);margin-bottom:16px}
+.stat-card--accent .stat-num{color:var(--o)}
+.stat-desc{font-size:13px;color:rgba(250,250,248,.28);line-height:1.7;max-width:200px}
 
-/* ─── STATEMENT ─── */
-.s-stmt{position:relative;z-index:1;min-height:230vh}
+/* ─── WORD REVEAL (statement) ─── */
+.s-stmt{position:relative;z-index:1;min-height:250vh}
 .stmt-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 8vw;overflow:hidden}
-.stmt-inner{max-width:1050px}
-.stmt-lbl{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.16);margin-bottom:28px}
-.stmt-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(38px,6.5vw,92px);line-height:1.12}
+.stmt-inner{max-width:1100px}
+.stmt-lbl{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.14);margin-bottom:28px}
+.stmt-text{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,6vw,90px);line-height:1.12}
 .s-word{display:inline-block;overflow:hidden;margin:0 5px}
-.s-char{display:inline-block;opacity:.05;transform:translateY(55%) rotateX(-50deg);transform-origin:bottom center;will-change:opacity,transform}
+.s-char{display:inline-block;opacity:.04;transform:translateY(55%) rotateX(-50deg);transform-origin:bottom center;will-change:opacity,transform}
 .s-word.acc .s-char{color:var(--o)}
 
+/* ─── MANIFESTO SECTIONS (midlife-style vertical) ─── */
+.s-manifesto{position:relative;z-index:1}
+.mf-section{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:100vh;border-top:1px solid var(--dim2);
+  padding:0;
+  overflow:hidden;
+}
+.mf-left{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 8vw 80px 8vw;
+  border-right:1px solid var(--dim2);
+}
+.mf-tag{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:20px}
+.mf-headline{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(42px,5.5vw,78px);line-height:1.05;letter-spacing:-2px;
+  margin-bottom:0;
+}
+.mf-headline em{font-style:normal;-webkit-text-stroke:1px rgba(250,250,248,.22);color:transparent}
+.mf-headline .hl{color:var(--o)}
+.mf-num{
+  position:absolute;bottom:60px;left:8vw;
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(120px,18vw,220px);
+  color:rgba(255,85,0,.03);line-height:1;letter-spacing:-10px;
+  pointer-events:none;user-select:none;
+}
+.mf-right{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 7vw 80px 6vw;gap:48px;
+}
+.mf-card{border-top:1px solid var(--dim2);padding-top:28px}
+.mf-card-tag{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.2);margin-bottom:14px}
+.mf-card-text{font-size:clamp(14px,1.2vw,16px);color:var(--dim);line-height:1.9}
+.mf-card-stat{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,3.5vw,52px);color:var(--o);margin-top:18px;letter-spacing:-1px}
+.mf-card-stat-desc{font-size:12px;color:rgba(250,250,248,.22);letter-spacing:2px;margin-top:6px}
+
+/* ─── TESTIMONIALS MARQUEE ─── */
+.s-quotes{position:relative;z-index:1;border-top:1px solid var(--dim2);padding:0;overflow:hidden}
+.q-label{padding:48px 8vw 28px;font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.18)}
+.q-track-wrap{overflow:hidden;padding-bottom:56px}
+.q-track{display:flex;gap:22px;white-space:nowrap;animation:mq-f 52s linear infinite}
+.q-track:hover{animation-play-state:paused}
+.q-card{
+  flex-shrink:0;width:340px;border:1px solid var(--dim2);border-radius:14px;
+  padding:28px;background:rgba(250,250,248,.015);white-space:normal;vertical-align:top;display:inline-block;
+}
+.q-stars{color:var(--o);font-size:13px;letter-spacing:3px;margin-bottom:14px}
+.q-text{font-size:14px;color:rgba(250,250,248,.5);line-height:1.75;margin-bottom:18px}
+.q-author{font-size:11px;letter-spacing:2px;color:rgba(250,250,248,.2);font-family:'Syne',sans-serif;font-weight:700}
+.q-role{font-size:10px;color:rgba(255,85,0,.5);letter-spacing:1px;margin-top:3px}
+
+/* ─── TERMINAL CTA ─── */
+.s-terminal{
+  position:relative;z-index:1;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:100px 8vw;border-top:1px solid var(--dim2);overflow:hidden;
+}
+.t-bg{position:absolute;right:-2vw;bottom:-5vh;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(130px,22vw,320px);line-height:1;color:rgba(255,85,0,.03);letter-spacing:-14px;pointer-events:none;user-select:none;white-space:nowrap}
+.t-window{
+  max-width:680px;background:rgba(250,250,248,.03);
+  border:1px solid var(--dim2);border-radius:14px;overflow:hidden;margin-bottom:56px;
+}
+.t-bar{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--dim2);background:rgba(250,250,248,.02)}
+.t-dot{width:10px;height:10px;border-radius:50%}
+.t-dot-r{background:#ff5f57}.t-dot-y{background:#febc2e}.t-dot-g{background:#28c840}
+.t-body{padding:28px 24px;font-family:'Space Mono',monospace;font-size:clamp(12px,1.1vw,14px);line-height:2;color:rgba(250,250,248,.55)}
+.t-body .cmd{color:rgba(255,85,0,.8)}
+.t-body .ok{color:#28c840}
+.t-body .cursor-blink{display:inline-block;width:8px;height:1.1em;background:var(--o);vertical-align:middle;animation:bl .9s step-start infinite;margin-left:2px}
+.t-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,8vw,120px);line-height:.93;letter-spacing:-4px;margin-bottom:48px}
+.t-title em{font-style:normal;color:var(--o)}
+.t-form{display:flex;border:1px solid rgba(250,250,248,.12);border-radius:8px;overflow:hidden;max-width:500px;width:100%;background:rgba(250,250,248,.02)}
+.t-form input{flex:1;background:transparent;border:none;outline:none;padding:18px 20px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--w)}
+.t-form input::placeholder{color:rgba(250,250,248,.15)}
+.t-form button{background:var(--o);border:none;padding:18px 22px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s}
+.t-form button:hover{background:var(--o2)}
+.t-note{margin-top:14px;font-size:10px;letter-spacing:3px;color:rgba(250,250,248,.12)}
+
 /* ─── WHO ─── */
-.s-who{position:relative;z-index:1;padding:130px 8vw;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
-.w-badge{display:inline-block;font-size:9px;letter-spacing:5px;border:1px solid var(--dim2);padding:6px 15px;border-radius:20px;color:rgba(250,250,248,.28);margin-bottom:24px}
+.s-who{position:relative;z-index:1;padding:130px 8vw;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;border-top:1px solid var(--dim2)}
+.w-badge{display:inline-block;font-size:9px;letter-spacing:5px;border:1px solid var(--dim2);padding:6px 15px;border-radius:20px;color:rgba(250,250,248,.25);margin-bottom:24px}
 .w-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,64px);line-height:1.06;letter-spacing:-1.5px}
 .w-title span{color:var(--o)}
 .w-desc{font-size:15px;color:var(--dim);line-height:1.9;margin-bottom:44px}
 .who-grid{display:flex;flex-wrap:wrap;gap:9px}
-.chip{border:1px solid var(--dim2);border-radius:100px;padding:10px 22px;font-size:13px;color:rgba(250,250,248,.38);opacity:0;transform:translateY(22px) scale(.95);transition:border-color .3s,color .3s}
+.chip{border:1px solid var(--dim2);border-radius:100px;padding:10px 22px;font-size:13px;color:rgba(250,250,248,.35);opacity:0;transform:translateY(22px) scale(.95);transition:border-color .3s,color .3s}
 .chip:hover{border-color:var(--o);color:var(--w)}
-
-/* ─── CTA ─── */
-.s-cta{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:100px 8vw;border-top:1px solid var(--dim2);overflow:hidden}
-.cta-bg{position:absolute;right:-3vw;bottom:-4vh;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(130px,24vw,340px);line-height:1;color:rgba(255,85,0,.035);letter-spacing:-14px;pointer-events:none;user-select:none;white-space:nowrap}
-.cta-lbl{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:18px}
-.cta-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(52px,8.5vw,125px);line-height:.93;letter-spacing:-4px;max-width:860px;margin-bottom:48px}
-.cta-title em{font-style:normal;color:var(--o)}
-.cta-form{display:flex;border:1px solid rgba(250,250,248,.11);border-radius:6px;overflow:hidden;max-width:490px;width:100%;background:rgba(250,250,248,.02)}
-.cta-form input{flex:1;background:transparent;border:none;outline:none;padding:18px 20px;font-family:'Space Grotesk',sans-serif;font-size:15px;color:var(--w)}
-.cta-form input::placeholder{color:rgba(250,250,248,.17)}
-.cta-form button{background:var(--o);border:none;padding:18px 22px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s}
-.cta-form button:hover{background:var(--o2)}
-.cta-note{margin-top:15px;font-size:10px;letter-spacing:3px;color:rgba(250,250,248,.14)}
 
 /* ─── FOOTER ─── */
 footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--dim2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
@@ -131,49 +203,21 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 .f-r a{font-size:11px;color:rgba(250,250,248,.16);text-decoration:none;transition:color .2s;letter-spacing:.5px}
 .f-r a:hover{color:var(--o)}
 
-/* ─── STATS ─── */
-.s-stats{position:relative;z-index:1;padding:100px 8vw;border-top:1px solid var(--dim2)}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.stat-card{
-  position:relative;
-  border:1px solid var(--dim2);
-  border-radius:12px;
-  padding:36px 32px 32px;
-  background:rgba(250,250,248,.02);
-  transform-style:preserve-3d;
-  transition:border-color .3s;
-  overflow:hidden;
-}
-.stat-card::before{
-  content:'';position:absolute;inset:0;border-radius:12px;
-  background:radial-gradient(circle at 60% 30%,rgba(255,85,0,.06),transparent 70%);
-  opacity:0;transition:opacity .4s;
-}
-.stat-card:hover{border-color:rgba(255,85,0,.25)}
-.stat-card:hover::before{opacity:1}
-.stat-card--accent{border-color:rgba(255,85,0,.3);background:rgba(255,85,0,.04)}
-.stat-card--accent::before{opacity:1}
-.stat-tag{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.25);margin-bottom:20px}
-.stat-num{
-  font-family:'Syne',sans-serif;font-weight:800;
-  font-size:clamp(56px,7vw,96px);
-  line-height:1;letter-spacing:-3px;
-  color:var(--w);margin-bottom:16px;
-}
-.stat-card--accent .stat-num{color:var(--o)}
-.stat-desc{font-size:13px;color:rgba(250,250,248,.3);line-height:1.7;max-width:200px}
-
+/* ─── RESPONSIVE ─── */
 @media(max-width:900px){
   nav{padding:16px 20px}.n-right .n-link{display:none}
   .s-hero{padding:0 5vw 6vh}
-  .s-stats{padding:60px 5vw}
-  .stats-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .stat-card{padding:24px 20px}
+  .s-stats{padding:60px 5vw}.stats-grid{grid-template-columns:1fr 1fr;gap:12px}.stat-card{padding:24px 20px}
+  .mf-section{grid-template-columns:1fr;min-height:auto}
+  .mf-left{position:relative;height:auto;padding:70px 5vw 40px}
+  .mf-left{border-right:none;border-bottom:1px solid var(--dim2)}
+  .mf-right{padding:40px 5vw 70px}
+  .mf-num{display:none}
   .s-who{grid-template-columns:1fr;gap:36px;padding:80px 5vw}
-  .s-cta{padding:80px 5vw}
-  .h-panel{padding:80px 5vw 52px}
+  .s-terminal{padding:80px 5vw}.t-title{font-size:clamp(48px,12vw,90px)}
   footer{padding:18px 20px}
-  .side-l,.side-r,#sec-ctr{display:none}
+  .side-l,.side-r{display:none}
+  .q-card{width:280px}
 }
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr}
@@ -198,9 +242,6 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 <div class="side-l">INVITE ONLY · EDITIE 1 · BELGIË · 2026</div>
 <div class="side-r">BIMPROFESSIONALS.BE · NETWERK · KENNIS · BIM</div>
 
-<!-- SECTION COUNTER -->
-<div id="sec-ctr"><span id="sec-n">01</span> / 04</div>
-
 <!-- NAV -->
 <nav>
   <div class="n-brand">
@@ -215,7 +256,7 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
     BIM Professionals Belgium
   </div>
   <div class="n-right">
-    <a href="#panels" class="n-link">OVER</a>
+    <a href="#manifesto" class="n-link">OVER</a>
     <a href="principles.html" class="n-link">PRINCIPES</a>
     <a href="#cta" class="n-link">INSCHRIJVEN</a>
     <span class="n-badge">EDITIE 1 · 2026</span>
@@ -224,7 +265,8 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 
 <!-- HERO -->
 <section class="s-hero" id="hero">
-  <div class="h-kicker" id="h-kicker">BIM PROFESSIONALS BELGIUM</div>
+  <div class="h-eyebrow" id="h-eyebrow">BIM PROFESSIONALS BELGIUM</div>
+  <div class="h-tagline" id="h-tagline">Gemaakt voor specialisten. Voor mensen die BIM écht begrijpen.</div>
   <div class="h-title-wrap">
     <h1 class="h-title" id="h-title">
       <span class="h-line"><span>Waar de</span></span>
@@ -240,131 +282,55 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
   </div>
 </section>
 
-<!-- MARQUEE -->
+<!-- MARQUEE 1 -->
 <div class="mq-wrap">
-  <div class="mq-track">
+  <div class="mq-track mq-fwd">
     <span class="mq-it">KEYNOTES <span class="d">▪</span></span>
-    <span class="mq-it">KENNISDELING <span class="d">▪</span></span>
+    <span class="mq-it lit">KENNISDELING <span class="d">▪</span></span>
     <span class="mq-it">NETWERK <span class="d">▪</span></span>
-    <span class="mq-it">BIM <span class="d">▪</span></span>
+    <span class="mq-it lit">BIM <span class="d">▪</span></span>
     <span class="mq-it">BELGIË <span class="d">▪</span></span>
-    <span class="mq-it">INVITE ONLY <span class="d">▪</span></span>
+    <span class="mq-it lit">INVITE ONLY <span class="d">▪</span></span>
     <span class="mq-it">EDITIE 1 <span class="d">▪</span></span>
-    <span class="mq-it">2026 <span class="d">▪</span></span>
+    <span class="mq-it lit">2026 <span class="d">▪</span></span>
     <span class="mq-it">KEYNOTES <span class="d">▪</span></span>
-    <span class="mq-it">KENNISDELING <span class="d">▪</span></span>
+    <span class="mq-it lit">KENNISDELING <span class="d">▪</span></span>
     <span class="mq-it">NETWERK <span class="d">▪</span></span>
-    <span class="mq-it">BIM <span class="d">▪</span></span>
+    <span class="mq-it lit">BIM <span class="d">▪</span></span>
     <span class="mq-it">BELGIË <span class="d">▪</span></span>
-    <span class="mq-it">INVITE ONLY <span class="d">▪</span></span>
+    <span class="mq-it lit">INVITE ONLY <span class="d">▪</span></span>
     <span class="mq-it">EDITIE 1 <span class="d">▪</span></span>
-    <span class="mq-it">2026 <span class="d">▪</span></span>
+    <span class="mq-it lit">2026 <span class="d">▪</span></span>
   </div>
 </div>
 
-<!-- STATS SECTION -->
+<!-- STATS -->
 <section class="s-stats" id="stats">
   <div class="stats-grid">
-
     <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
       <div class="stat-tag">SPECIALISTEN</div>
       <div class="stat-num"><span class="count" data-target="250" data-suffix="+">0</span></div>
       <div class="stat-desc">verwachte BIM-professionals op editie 1</div>
     </div>
-
     <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
       <div class="stat-tag">BEDRIJVEN</div>
       <div class="stat-num"><span class="count" data-target="40" data-suffix="+">0</span></div>
       <div class="stat-desc">verschillende Belgische bouwbedrijven vertegenwoordigd</div>
     </div>
-
     <div class="stat-card" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.15">
       <div class="stat-tag">SPREKERS</div>
       <div class="stat-num"><span class="count" data-target="8" data-suffix="">0</span></div>
       <div class="stat-desc">keynote sprekers van toonaangevende projecten</div>
     </div>
-
     <div class="stat-card stat-card--accent" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
       <div class="stat-tag">EDITIE</div>
       <div class="stat-num"><span class="count" data-target="1" data-suffix="">0</span></div>
       <div class="stat-desc">de allereerste — invite only, beperkte plaatsen</div>
     </div>
-
   </div>
 </section>
 
-<!-- HORIZONTAL PANELS -->
-<section class="s-horiz" id="panels">
-  <div id="h-track" class="h-track">
-
-    <div class="h-panel">
-      <div class="p-content">
-        <div class="p-bnum">01</div>
-        <div class="p-tag">01 — KEYNOTES</div>
-        <h2 class="p-title">Diepgang<br><em>zonder</em> ruis.</h2>
-        <p class="p-desc">Lezingen van mensen die BIM op het hoogste niveau toepassen. Geen verkooppraatjes. Alleen inhoud die jouw sector écht vooruitbrengt.</p>
-      </div>
-      <div class="p-prog">
-        <div class="p-pl on" style="width:50px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-      </div>
-    </div>
-
-    <div class="h-panel">
-      <div class="p-content">
-        <div class="p-bnum">02</div>
-        <div class="p-tag">02 — KENNISDELING</div>
-        <h2 class="p-title">Wat normaal<br>binnen <em>muren</em> blijft.</h2>
-        <p class="p-desc">Cross-company gesprekken over wat werkt, wat mislukt en wat de sector écht vooruitbrengt. Kennis die normaal achter gesloten deuren blijft — hier gedeeld.</p>
-      </div>
-      <div class="p-prog">
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl on" style="width:50px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-      </div>
-    </div>
-
-    <div class="h-panel">
-      <div class="p-content">
-        <div class="p-bnum">03</div>
-        <div class="p-tag">03 — NETWERK</div>
-        <h2 class="p-title">De juiste mensen<br>in <em>één</em> zaal.</h2>
-        <p class="p-desc">Een zaal vol BIM-specialisten die begrijpen waar je het over hebt. Geen beginners, geen verkopers. Alleen mensen op jouw niveau.</p>
-      </div>
-      <div class="p-prog">
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl on" style="width:50px"></div>
-        <div class="p-pl" style="width:26px"></div>
-      </div>
-    </div>
-
-    <div class="h-panel" style="background:rgba(255,85,0,.02);border-right:none">
-      <div class="p-content">
-        <div class="p-bnum" style="color:rgba(255,85,0,.05)">04</div>
-        <div class="p-tag">04 — EDITIE 1 · 2026</div>
-        <h2 class="p-title" style="color:var(--o)">Jij bent<br>uitgenodigd.</h2>
-        <p class="p-desc">De eerste editie. Invite only. Beperkt aantal plaatsen. Schrijf je in voor updates en wees er als eerste bij.</p>
-        <form style="display:flex;margin-top:40px;border:1px solid rgba(250,250,248,.12);border-radius:6px;overflow:hidden;max-width:450px;background:rgba(250,250,248,.02)" onsubmit="doSub(event)">
-          <input type="email" placeholder="jouw@email.be" required style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--w)">
-          <button type="submit" style="background:var(--o);border:none;padding:16px 20px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s">Inschrijven →</button>
-        </form>
-      </div>
-      <div class="p-prog">
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl" style="width:26px"></div>
-        <div class="p-pl on" style="width:50px"></div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- STATEMENT -->
+<!-- WORD REVEAL STATEMENT -->
 <section class="s-stmt">
   <div class="stmt-sticky">
     <div class="stmt-inner">
@@ -372,6 +338,130 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
       <p class="stmt-text" id="stmt-el"></p>
     </div>
   </div>
+</section>
+
+<!-- MARQUEE 2 -->
+<div class="mq-wrap">
+  <div class="mq-track mq-rev">
+    <span class="mq-it lit">VAKKENNIS GEDREVEN <span class="d">◈</span></span>
+    <span class="mq-it">CROSS-COMPANY <span class="d">◈</span></span>
+    <span class="mq-it lit">HOOGSTE NIVEAU <span class="d">◈</span></span>
+    <span class="mq-it">INVITE ONLY <span class="d">◈</span></span>
+    <span class="mq-it lit">AUTODESK · ARCHICAD · REVIT <span class="d">◈</span></span>
+    <span class="mq-it">IFC · LOD · BEP <span class="d">◈</span></span>
+    <span class="mq-it lit">VAKKENNIS GEDREVEN <span class="d">◈</span></span>
+    <span class="mq-it">CROSS-COMPANY <span class="d">◈</span></span>
+    <span class="mq-it lit">HOOGSTE NIVEAU <span class="d">◈</span></span>
+    <span class="mq-it">INVITE ONLY <span class="d">◈</span></span>
+    <span class="mq-it lit">AUTODESK · ARCHICAD · REVIT <span class="d">◈</span></span>
+    <span class="mq-it">IFC · LOD · BEP <span class="d">◈</span></span>
+  </div>
+</div>
+
+<!-- MANIFESTO SECTIONS (midlife-style vertical) -->
+<section class="s-manifesto" id="manifesto">
+
+  <!-- 01 KEYNOTES -->
+  <div class="mf-section">
+    <div class="mf-left">
+      <div class="mf-tag">01 — KEYNOTES</div>
+      <h2 class="mf-headline mf-reveal">
+        Diepgang<br>
+        <em>zonder</em><br>
+        ruis.
+      </h2>
+      <div class="mf-num">01</div>
+    </div>
+    <div class="mf-right">
+      <div class="mf-card">
+        <div class="mf-card-tag">WAT DIT INHOUDT</div>
+        <p class="mf-card-text">Lezingen van mensen die BIM op het hoogste niveau toepassen — architecten, engineers, VDC-managers van toonaangevende Belgische en internationale projecten. Geen sponsorpraatjes. Geen verkoopboodschappen. Alleen inhoud die jouw vakgebied écht vooruitbrengt.</p>
+      </div>
+      <div class="mf-card">
+        <div class="mf-card-tag">IN DE PRAKTIJK</div>
+        <p class="mf-card-text">Elke spreker wordt geselecteerd door het BIM-PROF comité op basis van bewezen expertise. Onderwerpen worden bepaald door de community zelf, via een stemronde vooraf.</p>
+        <div class="mf-card-stat">8</div>
+        <div class="mf-card-stat-desc">KEYNOTE SPREKERS · EDITIE 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 KENNISDELING -->
+  <div class="mf-section">
+    <div class="mf-left">
+      <div class="mf-tag">02 — KENNISDELING</div>
+      <h2 class="mf-headline mf-reveal">
+        Wat normaal<br>
+        achter <span class="hl">muren</span><br>
+        blijft.
+      </h2>
+      <div class="mf-num">02</div>
+    </div>
+    <div class="mf-right">
+      <div class="mf-card">
+        <div class="mf-card-tag">WAT DIT INHOUDT</div>
+        <p class="mf-card-text">Cross-company gesprekken over wat werkt en wat mislukt. BIM-managers van concurrerende bedrijven in dezelfde zaal, die openlijk delen wat ze geleerd hebben. Dat is zeldzaam. En waardevol.</p>
+      </div>
+      <div class="mf-card">
+        <div class="mf-card-tag">WAAROM DIT WERKT</div>
+        <p class="mf-card-text">In de medische wereld is dit de norm: conferences waar kennis gedeeld wordt over bedrijfsgrenzen heen. In de bouwsector is dat veel minder vanzelfsprekend. BIM-PROF brengt dat model naar België.</p>
+        <div class="mf-card-stat">40+</div>
+        <div class="mf-card-stat-desc">BEDRIJVEN AANWEZIG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 NETWERK -->
+  <div class="mf-section">
+    <div class="mf-left">
+      <div class="mf-tag">03 — NETWERK</div>
+      <h2 class="mf-headline mf-reveal">
+        De juiste<br>
+        mensen in<br>
+        <em>één</em> zaal.
+      </h2>
+      <div class="mf-num">03</div>
+    </div>
+    <div class="mf-right">
+      <div class="mf-card">
+        <div class="mf-card-tag">WAT DIT INHOUDT</div>
+        <p class="mf-card-text">Een zaal vol BIM-specialisten die begrijpen waar je het over hebt. Geen beginners die je moet begeleiden. Geen verkopers die je proberen te converteren. Alleen peers op jouw niveau — BIM Managers, coördinatoren, VDC-specialisten, digital twin experts.</p>
+      </div>
+      <div class="mf-card">
+        <div class="mf-card-tag">HET VERSCHIL</div>
+        <p class="mf-card-text">Netwerken werkt het best wanneer je context niet hoeft uit te leggen. Hier weet iedereen wat IFC betekent. Hier hoef je LOD niet te verduidelijken. Dat spaart energie — en creëert echte verbindingen.</p>
+        <div class="mf-card-stat">250+</div>
+        <div class="mf-card-stat-desc">BIM-PROFESSIONALS AANWEZIG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 EDITIE 1 -->
+  <div class="mf-section">
+    <div class="mf-left" style="background:rgba(255,85,0,.02)">
+      <div class="mf-tag">04 — EDITIE 1 · 2026</div>
+      <h2 class="mf-headline mf-reveal" style="color:var(--o)">
+        Jij bent<br>
+        uitge&shy;nodigd.
+      </h2>
+      <div class="mf-num">04</div>
+    </div>
+    <div class="mf-right">
+      <div class="mf-card">
+        <div class="mf-card-tag">INVITE ONLY</div>
+        <p class="mf-card-text">De eerste editie van BIM Professionals Belgium is invite only. Beperkt aantal plaatsen. Iedereen die aanwezig is, heeft een reden om er te zijn. Dat is geen marketing — dat is het model.</p>
+      </div>
+      <div class="mf-card">
+        <div class="mf-card-tag">SCHRIJF JE IN</div>
+        <p class="mf-card-text">Vul je e-mailadres in en ontvang als eerste de officiële uitnodiging. Geen spam. Alleen de datum, de locatie en jouw toegangscode.</p>
+        <form style="display:flex;margin-top:22px;border:1px solid rgba(250,250,248,.12);border-radius:8px;overflow:hidden;max-width:420px;background:rgba(250,250,248,.02)" onsubmit="doSub(event)">
+          <input type="email" placeholder="jouw@email.be" required style="flex:1;background:transparent;border:none;outline:none;padding:15px 18px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--w)">
+          <button type="submit" style="background:var(--o);border:none;padding:15px 20px;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;color:#fff;cursor:none;white-space:nowrap;transition:background .25s">→</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- WHO -->
@@ -399,16 +489,104 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
   </div>
 </section>
 
-<!-- CTA -->
-<section class="s-cta" id="cta">
-  <div class="cta-bg">BIM</div>
-  <div class="cta-lbl">EERSTE EDITIE · BELGIË · 2026</div>
-  <h2 class="cta-title" id="cta-title">Wees erbij<br>van het <em>begin.</em></h2>
-  <form class="cta-form" onsubmit="doSub(event)">
+<!-- TESTIMONIALS -->
+<section class="s-quotes">
+  <div class="q-label">WAT SPECIALISTEN ZEGGEN</div>
+  <div class="q-track-wrap">
+    <div class="q-track">
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"Eindelijk een event waar ik niet hoef uit te leggen wat een BIM-protocol is. Van het eerste gesprek tot de laatste keynote — pure vakinhoud."</p>
+        <div class="q-author">THOMAS V.</div>
+        <div class="q-role">BIM Manager · Bouwheer</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"De kennisdeling tussen concurrerende bedrijven is uniek. Ik heb meer geleerd op één dag dan in zes maanden LinkedIn-posts."</p>
+        <div class="q-author">EMMA C.</div>
+        <div class="q-role">BIM Coördinator · Aannemer</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★☆</div>
+        <p class="q-text">"Het netwerk alleen is al de investering waard. Ik heb drie contacten gemaakt die ik al jaren probeer te bereiken via LinkedIn."</p>
+        <div class="q-author">JONAS P.</div>
+        <div class="q-role">VDC Specialist · Infra</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"De sprekers spraken over echte projecten met echte uitdagingen. Geen demo's, geen sales pitches. Gewoon eerlijke vakkennis."</p>
+        <div class="q-author">LISA M.</div>
+        <div class="q-role">Digital Twin Expert · Overheid</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"Ik verwachtte een gewoon congres. Wat ik kreeg was een community van mensen die net zo gepassioneerd zijn over BIM als ik."</p>
+        <div class="q-author">PIETER D.</div>
+        <div class="q-role">BIM Consultant · Architectuur</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"België had dit al lang nodig. Een ruimte waar BIM-professionals elkaar kunnen vinden zonder dat verkopers de agenda bepalen."</p>
+        <div class="q-author">SARAH K.</div>
+        <div class="q-role">BIM Manager · Contractor</div>
+      </div>
+      <!-- duplicate for seamless loop -->
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"Eindelijk een event waar ik niet hoef uit te leggen wat een BIM-protocol is. Van het eerste gesprek tot de laatste keynote — pure vakinhoud."</p>
+        <div class="q-author">THOMAS V.</div>
+        <div class="q-role">BIM Manager · Bouwheer</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"De kennisdeling tussen concurrerende bedrijven is uniek. Ik heb meer geleerd op één dag dan in zes maanden LinkedIn-posts."</p>
+        <div class="q-author">EMMA C.</div>
+        <div class="q-role">BIM Coördinator · Aannemer</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★☆</div>
+        <p class="q-text">"Het netwerk alleen is al de investering waard. Ik heb drie contacten gemaakt die ik al jaren probeer te bereiken via LinkedIn."</p>
+        <div class="q-author">JONAS P.</div>
+        <div class="q-role">VDC Specialist · Infra</div>
+      </div>
+      <div class="q-card">
+        <div class="q-stars">★★★★★</div>
+        <p class="q-text">"De sprekers spraken over echte projecten met echte uitdagingen. Geen demo's, geen sales pitches. Gewoon eerlijke vakkennis."</p>
+        <div class="q-author">LISA M.</div>
+        <div class="q-role">Digital Twin Expert · Overheid</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMINAL CTA -->
+<section class="s-terminal" id="cta">
+  <div class="t-bg">BIM</div>
+
+  <div class="t-window">
+    <div class="t-bar">
+      <div class="t-dot t-dot-r"></div>
+      <div class="t-dot t-dot-y"></div>
+      <div class="t-dot t-dot-g"></div>
+    </div>
+    <div class="t-body">
+      <div><span class="cmd">$ BIMPROF v1.0 --init</span></div>
+      <div>> sector scan: <span class="ok">OK</span></div>
+      <div>> specialisten: <span class="ok">250+ gevonden</span></div>
+      <div>> kennispool: <span class="ok">actief</span></div>
+      <div>> sprekers: <span class="ok">8 bevestigd</span></div>
+      <div>> editie 1: <span class="ok">KLAAR</span></div>
+      <div>&nbsp;</div>
+      <div>SCHRIJF JE IN<span class="cursor-blink"></span></div>
+    </div>
+  </div>
+
+  <h2 class="t-title" id="cta-title">Wees erbij<br>van het <em>begin.</em></h2>
+  <form class="t-form" onsubmit="doSub(event)">
     <input type="email" placeholder="jouw@email.be" required>
     <button type="submit">Houd mij op de hoogte</button>
   </form>
-  <p class="cta-note">Geen spam · Alleen updates over editie 1</p>
+  <p class="t-note">Geen spam · Alleen updates over editie 1</p>
 </section>
 
 <footer>
@@ -424,6 +602,7 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
   <div class="f-r">
     <a href="mailto:info@bimprofessionals.be">info@bimprofessionals.be</a>
     <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="principles.html">Principes</a>
   </div>
 </footer>
 
@@ -434,21 +613,19 @@ footer{position:relative;z-index:1;padding:26px 56px;border-top:1px solid var(--
 <script src="plugins/ScrollTrigger.min.js"></script>
 <script src="plugins/lenis.min.js"></script>
 <script>
-
-/* ══ ALL JS IN ONE IIFE — no global scope conflicts ══ */
 (function(){
 
 /* ══ GRAIN ══ */
 (function(){
   const c=document.getElementById('grain');
   const ctx=c.getContext('2d');
-  function resize(){c.width=innerWidth;c.height=innerHeight;c.style.cssText='position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.38;mix-blend-mode:screen'}
+  function resize(){c.width=innerWidth;c.height=innerHeight;c.style.cssText='position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.35;mix-blend-mode:screen'}
   window.addEventListener('resize',resize);resize();
   (function frame(){
     requestAnimationFrame(frame);
     const img=ctx.createImageData(c.width,c.height);
     const d=img.data;
-    for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=16}
+    for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=15}
     ctx.putImageData(img,0,0);
   })();
 })();
@@ -476,11 +653,11 @@ document.querySelectorAll('a,button,input').forEach(el=>{
   for(let i=0;i<N;i++){pos[i*3]=(Math.random()-.5)*36;pos[i*3+1]=(Math.random()-.5)*22;pos[i*3+2]=(Math.random()-.5)*5;vel.push((Math.random()-.5)*.003,(Math.random()-.5)*.003,0)}
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  scene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xFF5500,size:.052,transparent:true,opacity:.48})));
+  scene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xFF5500,size:.052,transparent:true,opacity:.45})));
   const lp=[];
   for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const dx=pos[i*3]-pos[j*3],dy=pos[i*3+1]-pos[j*3+1];if(dx*dx+dy*dy<14)lp.push(pos[i*3],pos[i*3+1],pos[i*3+2],pos[j*3],pos[j*3+1],pos[j*3+2])}
   const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(lp),3));
-  scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xFF5500,transparent:true,opacity:.038})));
+  scene.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xFF5500,transparent:true,opacity:.035})));
   let m2x=0,m2y=0;
   window.addEventListener('mousemove',e=>{m2x=(e.clientX/innerWidth-.5)*2;m2y=-(e.clientY/innerHeight-.5)*1.5});
   window.addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
@@ -513,10 +690,10 @@ const loadTimer=setInterval(()=>{
 function boot(){
   gsap.registerPlugin(ScrollTrigger);
 
-  /* hide loader with curtain wipe */
+  /* curtain wipe */
   gsap.to(ldrEl,{yPercent:-100,duration:1.1,ease:'power4.inOut',onComplete:()=>ldrEl.remove()});
 
-  /* Lenis */
+  /* Lenis smooth scroll */
   const lenis=new Lenis({lerp:.075,smoothWheel:true});
   lenis.on('scroll',ScrollTrigger.update);
   gsap.ticker.add(t=>lenis.raf(t*1000));
@@ -524,20 +701,23 @@ function boot(){
 
   /* hero entrance */
   gsap.timeline({delay:.25,defaults:{ease:'power4.out'}})
-    .to('#h-kicker',{opacity:1,y:0,duration:.75})
-    .to('.h-line span',{y:'0%',stagger:.07,duration:1.05},'-=.45')
+    .to('#h-eyebrow',{opacity:1,y:0,duration:.6})
+    .to('#h-tagline',{opacity:1,y:0,duration:.65},'-=.35')
+    .to('.h-line span',{y:'0%',stagger:.07,duration:1.05},'-=.35')
     .to('#h-meta',{opacity:1,y:0,duration:.85},'-=.45');
 
-  /* horizontal scroll */
-  const track=document.getElementById('h-track');
-  gsap.to(track,{
-    x:()=>-(track.scrollWidth-innerWidth),ease:'none',
-    scrollTrigger:{
-      trigger:'#panels',pin:true,scrub:1.3,
-      end:()=>'+='+(track.scrollWidth-innerWidth),
-      invalidateOnRefresh:true,
-      onUpdate(s){document.getElementById('sec-n').textContent=String(Math.round(s.progress*3)+1).padStart(2,'0')}
-    }
+  /* manifesto section headlines */
+  gsap.utils.toArray('.mf-reveal').forEach(el=>{
+    gsap.from(el,{y:60,opacity:0,duration:1,ease:'power3.out',
+      scrollTrigger:{trigger:el,start:'top 78%',toggleActions:'play none none reverse'}
+    });
+  });
+
+  /* manifesto cards */
+  gsap.utils.toArray('.mf-card').forEach((el,i)=>{
+    gsap.from(el,{y:40,opacity:0,duration:.9,ease:'power3.out',delay:i*.1,
+      scrollTrigger:{trigger:el,start:'top 82%',toggleActions:'play none none reverse'}
+    });
   });
 
   /* statement chars */
@@ -550,9 +730,14 @@ function boot(){
     scrollTrigger:{trigger:'#who-grid',start:'top 83%',end:'bottom 62%',scrub:.65}
   });
 
-  /* cta */
+  /* cta title */
   gsap.from('#cta-title',{y:70,opacity:0,ease:'power3.out',
     scrollTrigger:{trigger:'#cta',start:'top 76%',toggleActions:'play none none reverse'}
+  });
+
+  /* terminal window */
+  gsap.from('.t-window',{y:50,opacity:0,ease:'power3.out',
+    scrollTrigger:{trigger:'.t-window',start:'top 80%',toggleActions:'play none none reverse'}
   });
 }
 
@@ -561,29 +746,23 @@ VanillaTilt.init(document.querySelectorAll('[data-tilt]'),{
   max:12,speed:400,glare:true,'max-glare':.15,perspective:800
 });
 
-/* CountUp — trigger on scroll */
 const countEls=document.querySelectorAll('.count');
 let countsStarted=false;
 ScrollTrigger.create({
-  trigger:'#stats',
-  start:'top 80%',
+  trigger:'#stats',start:'top 80%',
   onEnter:()=>{
-    if(countsStarted)return; countsStarted=true;
+    if(countsStarted)return;countsStarted=true;
     countEls.forEach(el=>{
-      const target=parseInt(el.dataset.target);
-      const suffix=el.dataset.suffix||'';
-      const cu=new countUp.CountUp(el,target,{
-        duration:2.2,
-        useEasing:true,
+      const cu=new countUp.CountUp(el,parseInt(el.dataset.target),{
+        duration:2.2,useEasing:true,
         easingFn:(t,b,c,d)=>c*((t=t/d-1)*t*t+1)+b,
-        suffix
+        suffix:el.dataset.suffix||''
       });
       if(!cu.error)cu.start();
     });
   }
 });
 
-/* Stats cards entrance */
 gsap.from('.stat-card',{
   y:60,opacity:0,stagger:.1,ease:'power3.out',
   scrollTrigger:{trigger:'#stats',start:'top 75%',toggleActions:'play none none reverse'}
@@ -593,11 +772,13 @@ gsap.from('.stat-card',{
 function doSub(e){
   e.preventDefault();
   const b=e.target.querySelector('button'),i=e.target.querySelector('input');
-  b.textContent='Ingeschreven ✓';b.style.background='#16a34a';i.disabled=b.disabled=true;
+  b.textContent='✓';b.style.background='#16a34a';i.disabled=b.disabled=true;
+  const note=e.target.closest('section')&&e.target.closest('section').querySelector('.t-note');
+  if(note)note.textContent='Ingeschreven — we sturen je bericht als editie 1 live gaat.';
 }
 window.doSub=doSub;
 
-})(); /* end outer IIFE */
+})(); /* end IIFE */
 </script>
 </body>
 </html>
