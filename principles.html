@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principles — BIM Professionals Belgium</title>
+<meta name="description" content="De operationele principes van BIM Professionals Belgium — gebaseerd op Ray Dalio's Principles framework.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--o:#FF5500;--b:#080808;--w:#FAFAF8;--dim:rgba(250,250,248,.38);--dim2:rgba(250,250,248,.1)}
+html{overflow-x:hidden}
+body{background:var(--b);color:var(--w);font-family:'Space Grotesk',sans-serif;cursor:none}
+
+/* GRAIN */
+#grain{position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.35;mix-blend-mode:screen}
+
+/* CURSOR */
+#cur{position:fixed;width:8px;height:8px;background:var(--o);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#curf{position:fixed;width:36px;height:36px;border:1.5px solid rgba(255,85,0,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+body.h-on #curf{width:56px;height:56px;border-color:var(--o)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:24px 56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;transition:border-color .3s}
+nav.scrolled{border-color:var(--dim2);background:rgba(8,8,8,.85);backdrop-filter:blur(12px)}
+.n-brand{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;opacity:.8;text-decoration:none;color:var(--w)}
+.n-back{font-size:9px;letter-spacing:4px;color:rgba(250,250,248,.3);text-decoration:none;transition:color .2s}
+.n-back:hover{color:var(--o)}
+
+/* HERO */
+.p-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 8vw 10vh;position:relative;overflow:hidden}
+.p-hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 60% 40%,rgba(255,85,0,.06),transparent)}
+.p-eyebrow{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:20px;opacity:0;transform:translateY(12px)}
+.p-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(64px,11vw,160px);line-height:.92;letter-spacing:-5px;position:relative;z-index:1}
+.p-line{display:block;overflow:hidden}
+.p-line span{display:block;transform:translateY(110%)}
+.p-ghost{position:absolute;top:0;left:0;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(64px,11vw,160px);line-height:.92;letter-spacing:-5px;-webkit-text-stroke:1.5px rgba(255,85,0,.15);color:transparent;transform:translate(5px,5px);pointer-events:none}
+.p-sub{max-width:580px;font-size:clamp(14px,1.4vw,17px);color:var(--dim);line-height:1.9;margin-top:36px;padding-top:24px;border-top:1px solid var(--dim2);opacity:0;transform:translateY(16px)}
+
+/* DALIO QUOTE */
+.s-quote{padding:100px 8vw;border-top:1px solid var(--dim2);position:relative;overflow:hidden}
+.q-bg{position:absolute;right:-2vw;top:50%;transform:translateY(-50%);font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(100px,18vw,260px);color:rgba(255,85,0,.03);letter-spacing:-10px;pointer-events:none;line-height:1}
+.q-mark{font-family:'Syne',sans-serif;font-weight:800;font-size:80px;color:var(--o);line-height:1;margin-bottom:16px;display:block}
+.q-text{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(24px,3.5vw,48px);line-height:1.25;max-width:800px;margin-bottom:28px;letter-spacing:-1px}
+.q-attr{display:flex;align-items:center;gap:16px}
+.q-line{width:32px;height:1px;background:var(--o)}
+.q-name{font-size:11px;letter-spacing:4px;color:rgba(250,250,248,.35)}
+
+/* BOARD */
+.s-board{padding:100px 8vw;border-top:1px solid var(--dim2)}
+.s-label{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:48px}
+.board-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.board-card{border:1px solid var(--dim2);border-radius:12px;padding:32px 28px;background:rgba(250,250,248,.02);transition:border-color .3s,transform .3s}
+.board-card:hover{border-color:rgba(255,85,0,.3);transform:translateY(-4px)}
+.board-card--special{border-color:rgba(255,85,0,.3);background:rgba(255,85,0,.03)}
+.bc-role{font-size:9px;letter-spacing:5px;color:rgba(250,250,248,.25);margin-bottom:14px}
+.bc-name{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;margin-bottom:6px}
+.bc-name span{color:var(--o)}
+.bc-org{font-size:11px;color:rgba(250,250,248,.25);letter-spacing:2px;margin-bottom:18px}
+.bc-mandate{font-size:13px;color:rgba(250,250,248,.45);line-height:1.75}
+.bc-tag{display:inline-block;margin-top:16px;font-size:9px;letter-spacing:3px;border:1px solid rgba(255,85,0,.3);color:var(--o);padding:4px 12px;border-radius:20px}
+
+/* PRINCIPLES */
+.s-principles{padding:100px 8vw;border-top:1px solid var(--dim2)}
+.principles-intro{max-width:600px;margin-bottom:72px}
+.pi-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px}
+.pi-title span{color:var(--o)}
+.pi-desc{font-size:15px;color:var(--dim);line-height:1.9}
+
+.principle-block{display:grid;grid-template-columns:80px 1fr;gap:32px;padding:48px 0;border-top:1px solid var(--dim2);align-items:start;opacity:0;transform:translateY(40px)}
+.principle-block:last-child{border-bottom:1px solid var(--dim2)}
+.pb-num{font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:rgba(255,85,0,.25);letter-spacing:-2px;line-height:1}
+.pb-right{}
+.pb-tag{font-size:9px;letter-spacing:5px;color:var(--o);margin-bottom:12px}
+.pb-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,3vw,38px);letter-spacing:-1px;margin-bottom:16px;line-height:1.1}
+.pb-body{font-size:15px;color:var(--dim);line-height:1.9;max-width:680px;margin-bottom:20px}
+.pb-bim{background:rgba(255,85,0,.06);border-left:2px solid var(--o);padding:16px 20px;border-radius:0 8px 8px 0;font-size:13px;color:rgba(250,250,248,.55);line-height:1.75;font-style:italic}
+.pb-bim strong{color:var(--o);font-style:normal}
+
+/* OPERATIONEEL */
+.s-ops{padding:100px 8vw;border-top:1px solid var(--dim2);background:rgba(255,85,0,.015)}
+.ops-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px}
+.ops-col h3{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;margin-bottom:24px;letter-spacing:-.5px}
+.ops-list{list-style:none}
+.ops-list li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--dim2);font-size:14px;color:var(--dim);line-height:1.6}
+.ops-list li::before{content:'→';color:var(--o);flex-shrink:0;font-weight:700}
+.ops-list li:last-child{border-bottom:none}
+
+/* CTA */
+.s-pcta{padding:120px 8vw;border-top:1px solid var(--dim2);display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden}
+.pcta-bg{position:absolute;right:-2vw;bottom:-4vh;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(120px,20vw,280px);line-height:1;color:rgba(255,85,0,.035);letter-spacing:-12px;pointer-events:none}
+.pcta-label{font-size:9px;letter-spacing:6px;color:var(--o);margin-bottom:20px}
+.pcta-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(48px,7vw,110px);line-height:.93;letter-spacing:-3px;max-width:800px;margin-bottom:44px}
+.pcta-title em{font-style:normal;color:var(--o)}
+.pcta-btn{display:inline-flex;align-items:center;gap:12px;background:var(--o);color:#fff;text-decoration:none;padding:18px 32px;border-radius:6px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;transition:background .25s,gap .25s}
+.pcta-btn:hover{background:#E63D00;gap:18px}
+
+/* FOOTER */
+footer{padding:26px 56px;border-top:1px solid var(--dim2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.f-l{font-size:11px;color:rgba(250,250,248,.16)}
+.f-r a{font-size:11px;color:rgba(250,250,248,.16);text-decoration:none;margin-left:22px;transition:color .2s}
+.f-r a:hover{color:var(--o)}
+
+@media(max-width:900px){
+  nav{padding:16px 20px}
+  .p-hero{padding:0 5vw 8vh}
+  .s-quote,.s-board,.s-principles,.s-ops,.s-pcta{padding:72px 5vw}
+  .board-grid{grid-template-columns:1fr}
+  .ops-grid{grid-template-columns:1fr}
+  .principle-block{grid-template-columns:1fr;gap:12px}
+  .pb-num{font-size:36px}
+  footer{padding:18px 20px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="grain"></canvas>
+<div id="cur"></div>
+<div id="curf"></div>
+
+<nav id="nav">
+  <a href="index.html" class="n-brand">
+    <svg viewBox="0 0 200 185" width="22" height="20" aria-hidden="true">
+      <path d="M 50,56 C 88,52 148,52 162,56 Q 180,58 180,70 L 180,136 Q 180,150 166,150 L 110,150 L 88,172 L 64,150 L 50,150 Q 34,150 34,136 L 34,70 Q 34,54 50,56 Z" fill="#0A0A0A" stroke="#CCC" stroke-width="2.2"/>
+      <text x="48" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">B</text>
+      <text x="100" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">I</text>
+      <text x="120" y="132" font-family="'Caveat',cursive" font-weight="700" font-size="66" fill="#FF5500">M</text>
+    </svg>
+    BIM Professionals Belgium
+  </a>
+  <a href="index.html" class="n-back">← TERUG NAAR HOME</a>
+</nav>
+
+<!-- HERO -->
+<section class="p-hero">
+  <div class="p-hero-bg"></div>
+  <div class="p-eyebrow" id="eyebrow">OPERATING PRINCIPLES · BOARD DOCUMENT</div>
+  <div style="position:relative">
+    <h1 class="p-title">
+      <span class="p-line"><span>Hoe wij</span></span>
+      <span class="p-line"><span style="color:var(--o)">beslissen,</span></span>
+      <span class="p-line"><span>bouwen &</span></span>
+      <span class="p-line"><span>groeien.</span></span>
+    </h1>
+    <div class="p-ghost" aria-hidden="true">Hoe wij<br>beslissen,<br>bouwen &<br>groeien.</div>
+  </div>
+  <p class="p-sub" id="p-sub">De principes die bepalen hoe BIM Professionals Belgium opereert — gebaseerd op Ray Dalio's Principles framework, vertaald naar de Belgische BIM-sector.</p>
+</section>
+
+<!-- DALIO QUOTE -->
+<section class="s-quote">
+  <div class="q-bg">TRUTH</div>
+  <span class="q-mark">"</span>
+  <p class="q-text">"The most important thing is that you develop your own principles and ideally put them in writing."</p>
+  <div class="q-attr">
+    <div class="q-line"></div>
+    <span class="q-name">RAY DALIO · PRINCIPLES: LIFE & WORK · 2017</span>
+  </div>
+</section>
+
+<!-- BOARD -->
+<section class="s-board">
+  <div class="s-label">DE BOARD · ADVISEURS</div>
+  <div class="board-grid">
+
+    <div class="board-card board-card--special">
+      <div class="bc-role">BOARD CHAIR · FOUNDER</div>
+      <div class="bc-name">Wout <span>Mortier</span></div>
+      <div class="bc-org">BIM MEJOR · HOWEST</div>
+      <div class="bc-mandate">Oprichter en strategisch leider. Verantwoordelijk voor visie, positionering en groei van BIM Professionals Belgium. Verbindt de Belgische BIM-sector met internationale best practices.</div>
+      <span class="bc-tag">OPERATIONS</span>
+    </div>
+
+    <div class="board-card">
+      <div class="bc-role">BOARD ADVISOR · PRINCIPES</div>
+      <div class="bc-name">Ray <span>Dalio</span></div>
+      <div class="bc-org">BRIDGEWATER ASSOCIATES</div>
+      <div class="bc-mandate">Architect van het Principles-framework. Zijn methodologie voor radicale transparantie, meritocracy of ideas en systematisch leren vormt de operationele backbone van BIM-PROF.</div>
+      <span class="bc-tag">PRINCIPLES & CULTURE</span>
+    </div>
+
+    <div class="board-card">
+      <div class="bc-role">BOARD ADVISOR · SCHAAL</div>
+      <div class="bc-name">Lisa <span>De Smet</span></div>
+      <div class="bc-org">HEAD OF DIGITAL · BIM-PROF</div>
+      <div class="bc-mandate">Verantwoordelijk voor digitale strategie, brand, content en online aanwezigheid. Coördineert alle web- en marketing-initiatieven. Rapporteert aan de Board Chair.</div>
+      <span class="bc-tag">DIGITAL & BRAND</span>
+    </div>
+
+    <div class="board-card">
+      <div class="bc-role">BOARD ADVISOR · EVENTS</div>
+      <div class="bc-name">Emma <span>Claes</span></div>
+      <div class="bc-org">HEAD OF EVENTS · BIM-PROF</div>
+      <div class="bc-mandate">Verantwoordelijk voor de operationele organisatie van alle edities. Selecteert sprekers, beheert het programma en zorgt dat het event op het niveau zit van een medisch vakconferentie.</div>
+      <span class="bc-tag">EVENTS & PROGRAMME</span>
+    </div>
+
+    <div class="board-card">
+      <div class="bc-role">BOARD ADVISOR · COMMUNITY</div>
+      <div class="bc-name">Jonas <span>Peeters</span></div>
+      <div class="bc-org">HEAD OF COMMUNITY · BIM-PROF</div>
+      <div class="bc-mandate">Bouwt en beheert het netwerk van BIM-professionals in België. Verantwoordelijk voor LinkedIn, ledenwerving en het exclusieve karakter van de community.</div>
+      <span class="bc-tag">COMMUNITY & GROWTH</span>
+    </div>
+
+    <div class="board-card">
+      <div class="bc-role">BOARD ADVISOR · PARTNERS</div>
+      <div class="bc-name">Thomas <span>Wilms</span></div>
+      <div class="bc-org">HEAD OF PARTNERSHIPS · BIM-PROF</div>
+      <div class="bc-mandate">Verantwoordelijk voor sponsoring, partnerships en industrie-relaties. Contacteert Autodesk Belgium, Trimble, nemetschek en andere key players in de Belgische BIM-markt.</div>
+      <span class="bc-tag">PARTNERSHIPS & REVENUE</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="s-principles">
+  <div class="principles-intro">
+    <div class="s-label">5 OPERATING PRINCIPLES</div>
+    <h2 class="pi-title">De regels waar<br>we ons <span>nooit</span> aan onttrekken.</h2>
+    <p class="pi-desc">Ray Dalio bouwde Bridgewater op 5 principes. Wij hebben ze vertaald naar de BIM-sector. Dit is niet inspirationeel — dit is hoe we opereren.</p>
+  </div>
+
+  <div class="principle-block" id="p1">
+    <div class="pb-num">01</div>
+    <div class="pb-right">
+      <div class="pb-tag">RADICAL TRANSPARENCY</div>
+      <h3 class="pb-title">Iedereen ziet alles.<br>Altijd.</h3>
+      <p class="pb-body">Bij Bridgewater worden vergaderingen opgenomen, beslissingen gedocumenteerd en fouten openlijk besproken. Geen verborgen agenda's, geen politiek. De waarheid wint — altijd — ook als die oncomfortabel is.</p>
+      <div class="pb-bim"><strong>BIM-PROF toepassing:</strong> Alle edities worden geëvalueerd met publieke feedback van deelnemers. Sprekers worden geselecteerd op basis van transparante criteria die op de website staan. De financiën van het event worden gedeeld met de community. Geen smoke and mirrors.</div>
+    </div>
+  </div>
+
+  <div class="principle-block" id="p2">
+    <div class="pb-num">02</div>
+    <div class="pb-right">
+      <div class="pb-tag">MERITOCRACY OF IDEAS</div>
+      <h3 class="pb-title">Het beste idee wint.<br>Niet de hoogste titel.</h3>
+      <p class="pb-body">Dalio's grootste inzicht: organisaties falen omdat mensen met macht slechte ideeën doordrukken. Bij Bridgewater heeft een junior analyst evenveel recht om een directeur te challengen als omgekeerd. Het idee telt, niet de rang.</p>
+      <div class="pb-bim"><strong>BIM-PROF toepassing:</strong> Een BIM-modelleur met 3 jaar ervaring kan een beter voorstel hebben voor het event-programma dan een BIM-manager met 15 jaar. We selecteren sprekers, thema's en formats op basis van kwaliteit van het idee — niet van het bedrijf of de functietitel erachter.</div>
+    </div>
+  </div>
+
+  <div class="principle-block" id="p3">
+    <div class="pb-num">03</div>
+    <div class="pb-right">
+      <div class="pb-tag">PAIN + REFLECTION = PROGRESS</div>
+      <h3 class="pb-title">Fouten zijn verplicht<br>leermateriaal.</h3>
+      <p class="pb-body">Dalio zegt: "If you're not making mistakes, you're not trying hard enough." Maar de fout alleen is niets. Het is de reflectie erna die waarde creëert. Elke mislukking wordt gedocumenteerd en geanalyseerd — niet om schuld toe te wijzen, maar om het systeem te verbeteren.</p>
+      <div class="pb-bim"><strong>BIM-PROF toepassing:</strong> Na elke editie organiseren we een interne "postmortem" met het volledige team. Wat misliep, waarom, en welk systeem we aanpassen. De meest eerlijke evaluaties worden gedeeld met de community — want BIM-professionals waarderen eerlijkheid over BIM-fouten meer dan perfectie.</div>
+    </div>
+  </div>
+
+  <div class="principle-block" id="p4">
+    <div class="pb-num">04</div>
+    <div class="pb-right">
+      <div class="pb-tag">BELIEVABILITY-WEIGHTED DECISIONS</div>
+      <h3 class="pb-title">Niet alle stemmen<br>wegen even zwaar.</h3>
+      <p class="pb-body">Dalio maakt een fundamenteel onderscheid: democratie van stemmen ≠ democratie van ideeën. Wie meer bewezen track record heeft op een domein, heeft meer gewicht in beslissingen over dat domein. Dit is eerlijk, niet elitair.</p>
+      <div class="pb-bim"><strong>BIM-PROF toepassing:</strong> Bij programmaselectie wegen BIM Managers met aantoonbare implementatieervaring zwaarder dan mensen zonder. Bij technische discussies over IFC of CDE-platformen primeert de stem van de specialist. We meten geloofwaardigheid op basis van output, niet op basis van titel of netwerk.</div>
+    </div>
+  </div>
+
+  <div class="principle-block" id="p5">
+    <div class="pb-num">05</div>
+    <div class="pb-right">
+      <div class="pb-tag">THE 5-STEP PROCESS</div>
+      <h3 class="pb-title">Elke editie doorloopt<br>exact dezelfde cyclus.</h3>
+      <p class="pb-body">Dalio's universele beslissingscyclus: (1) Stel duidelijke doelen. (2) Identificeer problemen die die doelen in de weg staan. (3) Diagnose de oorzaak. (4) Ontwerp een oplossing. (5) Voer uit. Simpel, maar de meeste organisaties slaan stap 2 en 3 over.</p>
+      <div class="pb-bim">
+        <strong>BIM-PROF editie cyclus:</strong><br>
+        <strong>1. DOEL</strong> — Wat willen deelnemers leren en meenemen?<br>
+        <strong>2. PROBLEEM</strong> — Wat blokkeert BIM-adoptie in België vandaag?<br>
+        <strong>3. DIAGNOSE</strong> — Is het een kennis-, tools- of cultuurprobleem?<br>
+        <strong>4. DESIGN</strong> — Welk programma adresseert dit het best?<br>
+        <strong>5. EXECUTE</strong> — Organiseer, meet, verbeter.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPERATIONELE REGELS -->
+<section class="s-ops">
+  <div class="s-label">OPERATIONELE REGELS · DAGELIJKS</div>
+  <div class="ops-grid">
+    <div class="ops-col">
+      <h3>Wat we altijd doen</h3>
+      <ul class="ops-list">
+        <li>Elke beslissing wordt schriftelijk vastgelegd met de redenering erachter</li>
+        <li>Feedback na events is verplicht en anoniem beschikbaar voor iedereen</li>
+        <li>Sprekers worden geselecteerd op basis van een publiek criteriadocument</li>
+        <li>Fouten worden openlijk besproken — intern en waar relevant extern</li>
+        <li>Elk teamlid mag elke beslissing challengen via het "Believability" protocol</li>
+        <li>De 5-Step Process loopt voor elke nieuwe editie vanaf dag 1</li>
+        <li>Kwaliteit gaat altijd voor snelheid — liever één excellente editie dan twee middelmatige</li>
+      </ul>
+    </div>
+    <div class="ops-col">
+      <h3>Wat we nooit doen</h3>
+      <ul class="ops-list">
+        <li>Bedrijfslogo's kopen een sprekerspot — nooit</li>
+        <li>Deelnemers toelaten op basis van wie ze kennen in plaats van wie ze zijn</li>
+        <li>Feedback negeren omdat ze oncomfortabel is</li>
+        <li>Beslissingen nemen op basis van politiek of populariteit</li>
+        <li>Het exclusieve karakter compromitteren voor meer tickets</li>
+        <li>Slechte edities verdoezelen — eerlijk zijn is onze reputatie</li>
+        <li>Snoeien in kwaliteit van sprekers, locatie of format om kosten te drukken</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="s-pcta">
+  <div class="pcta-bg">BIM</div>
+  <div class="pcta-label">EDITIE 1 · 2026 · INVITE ONLY</div>
+  <h2 class="pcta-title">Klaar om deel<br>uit te maken van<br>iets <em>echts</em>?</h2>
+  <a href="index.html#cta" class="pcta-btn">Schrijf je in voor updates →</a>
+</section>
+
+<footer>
+  <div class="f-l">© 2026 BIM Professionals Belgium · Principles v1.0</div>
+  <div class="f-r">
+    <a href="index.html">Home</a>
+    <a href="mailto:info@bimprofessionals.be">Contact</a>
+  </div>
+</footer>
+
+<script src="plugins/gsap.min.js"></script>
+<script src="plugins/ScrollTrigger.min.js"></script>
+<script src="plugins/lenis.min.js"></script>
+<script>
+(function(){
+
+/* GRAIN */
+(function(){
+  const c=document.getElementById('grain');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=innerWidth;c.height=innerHeight;c.style.cssText='position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:.35;mix-blend-mode:screen'}
+  window.addEventListener('resize',resize);resize();
+  (function frame(){requestAnimationFrame(frame);const img=ctx.createImageData(c.width,c.height);const d=img.data;for(let i=0;i<d.length;i+=4){const v=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=15}ctx.putImageData(img,0,0)})();
+})();
+
+/* CURSOR */
+const cur=document.getElementById('cur'),curf=document.getElementById('curf');
+let mx=innerWidth/2,my=innerHeight/2,fx=mx,fy=my;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('h-on'));el.addEventListener('mouseleave',()=>document.body.classList.remove('h-on'))});
+(function f(){requestAnimationFrame(f);fx+=(mx-fx)*.1;fy+=(my-fy)*.1;curf.style.left=fx+'px';curf.style.top=fy+'px'})();
+
+/* NAV scroll */
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',scrollY>60)});
+
+/* ANIMATIONS */
+gsap.registerPlugin(ScrollTrigger);
+const lenis=new Lenis({lerp:.075,smoothWheel:true});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add(t=>lenis.raf(t*1000));
+gsap.ticker.lagSmoothing(0);
+
+/* Hero */
+gsap.timeline({delay:.1,defaults:{ease:'power4.out'}})
+  .to('#eyebrow',{opacity:1,y:0,duration:.7})
+  .to('.p-line span',{y:'0%',stagger:.07,duration:1.0},'-=.4')
+  .to('#p-sub',{opacity:1,y:0,duration:.8},'-=.4');
+
+/* Quote */
+gsap.from('.q-mark,.q-text,.q-attr',{
+  y:40,opacity:0,stagger:.12,ease:'power3.out',
+  scrollTrigger:{trigger:'.s-quote',start:'top 78%',toggleActions:'play none none reverse'}
+});
+
+/* Board cards */
+gsap.from('.board-card',{
+  y:50,opacity:0,stagger:.08,ease:'power3.out',
+  scrollTrigger:{trigger:'.board-grid',start:'top 80%',toggleActions:'play none none reverse'}
+});
+
+/* Principle blocks */
+document.querySelectorAll('.principle-block').forEach((el,i)=>{
+  gsap.to(el,{
+    opacity:1,y:0,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 82%',toggleActions:'play none none reverse'}
+  });
+});
+
+/* Ops lists */
+gsap.from('.ops-list li',{
+  x:-20,opacity:0,stagger:.06,ease:'power2.out',
+  scrollTrigger:{trigger:'.s-ops',start:'top 78%',toggleActions:'play none none reverse'}
+});
+
+/* CTA */
+gsap.from('.pcta-title,.pcta-btn',{
+  y:50,opacity:0,stagger:.15,ease:'power3.out',
+  scrollTrigger:{trigger:'.s-pcta',start:'top 78%',toggleActions:'play none none reverse'}
+});
+
+})();
+</script>
+</body>
+</html>
